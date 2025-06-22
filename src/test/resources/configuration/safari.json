@@ -1,7 +1,0 @@
-{
-  "browser": "safari",
-  "browserSize": "1920x1080",
-  "headless": false,
-  "timeout": 10000,
-  "language": "en"
-}

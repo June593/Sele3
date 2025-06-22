@@ -1,7 +1,46 @@
-# Automated testing web application by using Java, Selenide
+# 🚀 Level-3 Selenium Automation Framework
 
-This is an example of using Selenide test framework.
+A robust UI automation framework built using **Selenide & Selenium**, with support for **parallel execution**, **dynamic environment switching**, **Selenium Grid integration**, and **detailed reporting** via Allure.
 
+---
+
+## ✅ Project Highlights
+
+### Implemented Features:
+- [x] Core framework built on Selenide
+- [x] Integrated HTML, Allure, and ReportPortal reports
+- [x] Retry logic for failed test cases
+- [x] Parallel/distributed testing
+- [x] Cross browsers testing: Chrome, Safari
+- [x] Remote execution via Selenium Grid
+- [ ] Jenkins CI pipeline with scheduled runs and email reports
+
+### In Progress:
+
+---
+
+## 📁 Project Structure
+
+```bash
+.
+├── pom.xml
+├── Jenkinsfile
+├── README.md
+├── src
+│   ├── main/java
+│   │   ├── common          # Shared constants
+│   │   ├── drivers         # WebDriver & Selenide configuration
+│   │   ├── page           # Page Object Models
+│   │   ├── testdata        # YAML/Excel data readers
+│   │   └── utils           # Utility methods
+│   └── test/java
+│       ├── listeners       # TestNG hooks for retry, screenshots, logging
+│       └── testcases       # E2E test scripts by domain
+│   └── test/resources
+│       ├── suites          # TestNG XML files
+│       ├── testdata        # Structured test input
+│       └── selenide.properties #selenide config
+```
 ## Pre-requites
 
 - Install Java 21 or above
@@ -9,30 +48,51 @@ This is an example of using Selenide test framework.
 - Using Selenide 7.9.x
 - Using TestNG latest
 
-## Installation
+# 🏎️ Running Tests
 
-- CD to the project folder
-- Open CMD/terminal then type
+### 1️⃣ Install Dependencies
 
-```cmd
-mvn clean install
-```
-
-## Execute
-
-- You can run test suite by this command line.
-
-### Run by Maven Command Line
-Open your Terminal and run these commands for checking Java version.
+- Get the project file then open your terminal from the project root folder and execute.
 
 ```
-javac -version
+mvn clean install -DskipTests
 ```
 
+### 2️⃣ Run Tests
 
-Open the cmd and go to your project contains POM file `\HieuNguyen_8298_Sele2\automated-test>\`
-. Add this command to run all of testcases
-```mvn clean test```
+```
+mvn clean test \
+  -Dselenide.browser=chrome \
+  -Dselenide.headless=true \
+  -Dselenide.timeout=20000 \
+  -Dselenide.pageLoadStrategy=normal \
+  -Dselenide.remote=http://localhost:4444 \ # only use this if you are running tests on Selenium Grid
+  -Dselenide.baseUrl=https://www.agoda.com \
+  -Dsurefire.suiteXmlFiles=src/test/resources/suites/AgodaRegression.xml \
+  -Dgroups=smoke \
+  -Dparallel=methods \
+  -DthreadCount=5 \
+  -DmaxRetry=3 \
+  -DretryStrategy=post-suite
+  ```
+
+| Parameter                     | Description                                                                  |
+|-------------------------------|------------------------------------------------------------------------------|
+| `-Dselenide.browser`          | Specifies the browser to use (`chrome`, `firefox`, `edge`, `safari`).        |
+| `-Dselenide.headless`         | Enables headless mode (`true` or `false`) for browser execution.             |
+| `-Dselenide.timeout`          | Sets the default timeout (in milliseconds) for element waits.                |
+| `-Dselenide.pageLoadStrategy` | Controls how the browser waits for page loading (`normal`, `eager`, `none`). |
+| `-Dselenide.remote`           | URL of the remote Selenium Grid server (only needed for remote execution).   |
+| `-Dselenide.baseUrl`          | Base URL of the application under test.                                      |
+| `-Dsurefire.suiteXmlFiles`    | Path to the TestNG XML suite file to execute.                                |
+| `-Dgroups`                    | Specifies which test group(s) to run (e.g., `smoke`, `regression`).          |
+| `-Dparallel`                  | Specifies parallel execution mode (`classes`, `methods`, or `tests`).        |
+| `-DthreadCount`               | Number of threads to use when running tests in parallel.                     |
+| `-DmaxRetry`                  | Maximum number of retry attempts for failed tests.                           |
+| `-DretryStrategy`             | Retry strategy to apply (`immediate` or `post-suite`).                       |
+
+
+
 
 If you want to run the case in Specify .xml file, give a reference at your .xml file path
 
@@ -70,15 +130,6 @@ In command line, add this command
 
 ```mvn clean test -DtestngFile=${suiteFile}.xml```
 
-                                           Browser start with maximize or not |
-
-### Parallel testing
-
-- Tests, classes, methods can be run in parallel by adding parallel attribute on xml suite
-- For example:
-  ```
-  <suite name="My suite" parallel="classes" thread-count="2">
-  ```
 
 ### Distributed testing
 
@@ -94,15 +145,17 @@ In command line, add this command
 - Allure report is using in this framework
 
   ### Installation
-    - You can refer to this link to install allure: [link](https://docs.qameta.io/allure/#_installing_a_commandline)
+  - You can refer to this link to install allure: [link](https://docs.qameta.io/allure/#_installing_a_commandline)
   ### Report generation
-    - After running the test, the report is generated on the /allure-result directory
-    - Use this command from project folder to generate report
+  - After running the test, the report is generated on the /allure-result directory
+  - Use this command from project folder to generate report
 
 ```cmd
 allure serve
 ```
 
-## License
+### 3️⃣ View Allure Report
 
-[MIT](https://choosealicense.com/licenses/mit/)
+```sh    
+  allure serve
+```
