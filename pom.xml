@@ -32,17 +32,10 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.17.1</version> <!-- version mới nhất tại 2025 -->
+            <version>2.17.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.24.2</version>
-            <scope>test</scope>
-        </dependency>
         <!-- Allure -->
-
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
@@ -51,7 +44,7 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
-            <version>2.10.1</version> <!-- hoặc version mới nhất -->
+            <version>2.10.1</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>

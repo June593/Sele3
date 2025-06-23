@@ -12,9 +12,7 @@ import static com.codeborne.selenide.Selenide.closeWebDriver;
 public class TestBase {
 
     @BeforeClass(alwaysRun = true)
-    @Parameters({"browser", "language"})
-    public void beforeClass(@Optional String browser,
-                            @Optional String languageOverride) {
+    public void beforeClass() {
     }
 
     @AfterClass(alwaysRun = true)

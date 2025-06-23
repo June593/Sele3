@@ -1,6 +1,7 @@
 package com.sele3.testng;
 
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.logevents.SelenideLogger;
 import io.qameta.allure.Allure;
 import io.qameta.allure.listener.StepLifecycleListener;
@@ -12,20 +13,13 @@ import org.slf4j.LoggerFactory;
 import org.testng.*;
 import org.testng.annotations.ITestAnnotation;
 import java.io.ByteArrayInputStream;
+import java.io.FileWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class TestListener implements ITestListener, IAnnotationTransformer, StepLifecycleListener {
-
-    private static final List<ITestResult> failedTests = new ArrayList<>();
-
-    public static List<ITestResult> getFailedTests() {
-        return new ArrayList<>(failedTests);
-    }
-
 
     @Override
     public void onTestFailure(ITestResult result) {
@@ -35,7 +29,24 @@ public class TestListener implements ITestListener, IAnnotationTransformer, Step
         } catch (Exception e) {
             logger.info("Failed to capture screenshot: " + e.getMessage());
         }
-        failedTests.add(result);
+        try {
+            String dom = WebDriverRunner.source();
+            if (dom != null && !dom.trim().isEmpty()) {
+                Files.createDirectories(Paths.get("target/dom-dump"));
+                String filePath = "target/dom-dump/" + result.getName() + "_DOM.html";
+
+                try (FileWriter writer = new FileWriter(filePath)) {
+                    writer.write(dom);
+                }
+
+                logger.info("DOM saved to: " + filePath);
+
+                // Attach DOM to Allure
+                Allure.addAttachment("DOM Snapshot", "text/html", dom, ".html");
+            }
+        } catch (Exception e) {
+            logger.info("Failed to capture DOM: " + e.getMessage());
+        }
     }
 
     @Override

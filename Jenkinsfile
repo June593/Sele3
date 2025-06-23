@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/June593/Sele3.git', branch: 'config-selenide-framework'
+                git url: 'https://github.com/June593/Sele3.git', branch: 'main'
             }
         }
 
