@@ -65,7 +65,6 @@ public class TestListener implements ITestListener, IAnnotationTransformer, Step
     public void onFinish(ITestContext context) {
     }
 
-
     @Override
     public void transform(
             ITestAnnotation annotation,

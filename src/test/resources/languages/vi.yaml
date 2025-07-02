@@ -1,0 +1,13 @@
+button:
+  close: "Đóng"
+  search: "TÌM"
+filter:
+  popular_filter: "Bộ lọc phổ biến"
+  property_type: "Loại hình nơi ở"
+  star_rating: "Xếp hạng sao"
+checkbox:
+  4_stars: "4-Đánh giá sao"
+  3_stars: "3-Đánh giá sao"
+slider:
+  min: "TỐI THIỂU"
+  max: "TỐI ĐA"

@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="DemoSuite" parallel="false" thread-count="0">
+<suite name="Sele3" parallel="false" thread-count="0">
     <parameter name="retryMode" value="immediate"/>
     <parameter name="maxRetryCount" value="0"/>
+    <parameter name="browser" value="chrome"/>
+    <parameter name="environment" value="agoda"/>
+    <parameter name="language" value="vi"/>
     <listeners>
         <listener class-name="com.sele3.testng.TestListener"/>
     </listeners>
-    <test name="SampleTests">
+    <test name="AgodaTest">
         <classes>
             <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndSortHotelSuccessfully"/>
         </classes>
