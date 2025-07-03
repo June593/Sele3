@@ -13,13 +13,13 @@ pipeline {
     }
 
     triggers {
-            cron('H 8 * * *')
+            cron('0 8 * * *')
         }
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/June593/Sele3.git', branch: 'TestJenkin'
+                git url: 'https://github.com/June593/Sele3.git', branch: 'main'
             }
         }
 

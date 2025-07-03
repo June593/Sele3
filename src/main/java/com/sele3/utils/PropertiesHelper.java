@@ -31,12 +31,8 @@ public class PropertiesHelper {
     }
 
     private static void initProps() {
-        String profileFile = System.getProperty("profile");
-        if (profileFile != null) {
-            profile = initPropsForName("profiles/" + profileFile + ".properties");
-        }
+        profile = initPropsForName("profiles/" + InputParameters.ENV + ".properties");
     }
-
 
     public static String getPropValue(String key) {
         return getPropValue(key, null);

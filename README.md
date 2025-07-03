@@ -23,8 +23,8 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 - [x] Source control practice: branch
 - [x] Switch test environment: dev, stg (dev: agoda.com, stg: vj.com)
 - [ ] Wrap custom controls
-- [ ] Data driven testing: test data is in excel file
-- [] Working with Shadow DOM
+- [ ] Data driven testing: test data is in Excel file
+- [ ] Working with Shadow DOM
 - [ ] Compare with another FW e.g. Playwright
 
 ---

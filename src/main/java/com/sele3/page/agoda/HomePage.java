@@ -1,4 +1,5 @@
 package com.sele3.page.agoda;
+
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
@@ -55,14 +56,19 @@ public class HomePage {
 
     @Step("Select date: {date}")
     public void selectDate(LocalDate date) {
-        LocalDate minimumDate = LocalDate.parse(calendarDate.first().getAttribute("data-selenium-date"));
-        LocalDate maximumDate = LocalDate.parse(calendarDate.last().getAttribute("data-selenium-date"));
-        if (date.isBefore(minimumDate)) {
-            previousMonthButton.click();
+        while (true) {
+            LocalDate minimumDate = LocalDate.parse(calendarDate.first().getAttribute("data-selenium-date"));
+            LocalDate maximumDate = LocalDate.parse(calendarDate.last().getAttribute("data-selenium-date"));
+
+            if (date.isBefore(minimumDate)) {
+                previousMonthButton.click();
+            } else if (date.isAfter(maximumDate)) {
+                nextMonthButton.click();
+            } else {
+                break;
+            }
         }
-        if (date.isAfter(maximumDate)) {
-            nextMonthButton.click();
-        }
+
         getSelectDate(date).click();
     }
 

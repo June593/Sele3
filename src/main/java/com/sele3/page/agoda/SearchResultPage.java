@@ -133,11 +133,6 @@ public class SearchResultPage {
         );
     }
 
-    private SelenideElement getPriceSlider(String text) {
-        return $x(String.format("//div[@id='SideBarLocationFilters']//div[@aria-label='%s']", text))
-                .shouldBe(Condition.visible);
-    }
-
     private SelenideElement getSelectedCheckboxByValue(int dataValue) {
         return $x(String.format("//div[@id='SideBarLocationFilters']//legend[@id='filter-menu-RecentFilters']//following-sibling::ul//li//label[@data-element-value='%d']//input", dataValue))
                 .shouldBe(Condition.exist);
@@ -148,7 +143,6 @@ public class SearchResultPage {
     private ElementsCollection hotelImg = $$x("//li[@data-selenium='hotel-item']//button[@data-element-name='ssrweb-mainphoto']/img");
     private SelenideElement lowestPriceButton = $x("//button[@data-element-name='search-sort-price']");
     private SelenideElement header = $("header");
-    private ElementsCollection rating = $$x("//div[@data-testid='rating-container']//span");
     private SelenideElement minPriceTextBox = $("#price_box_0");
     private SelenideElement maxPriceTextBox = $("#price_box_1");
 }
