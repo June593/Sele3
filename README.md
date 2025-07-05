@@ -13,9 +13,19 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 - [x] Parallel/distributed testing
 - [x] Cross browsers testing: Chrome, Safari
 - [x] Remote execution via Selenium Grid
-- [ ] Jenkins CI pipeline with scheduled runs and email reports
-
-### In Progress:
+- [ ] Test cases: VJ, Agoda (1TC), TBD 
+- [x] Jenkins CI pipeline with scheduled runs and email reports
+- 
+### User Cases
+- [ ] Content testing
+- [x] Multiple languages testing
+- [x] Group tests by purposes: regression, smoke/sanity test
+- [x] Source control practice: branch
+- [x] Switch test environment: dev, stg (dev: agoda.com, stg: vj.com)
+- [ ] Wrap custom controls
+- [ ] Data driven testing: test data is in Excel file
+- [ ] Working with Shadow DOM
+- [ ] Compare with another FW e.g. Playwright
 
 ---
 
@@ -28,17 +38,16 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 ├── README.md
 ├── src
 │   ├── main/java
+│   │   ├── data  
 │   │   ├── common          # Shared constants
-│   │   ├── drivers         # WebDriver & Selenide configuration
-│   │   ├── page           # Page Object Models
-│   │   ├── testdata        # YAML/Excel data readers
+│   │   ├── testng          # TestListener
+│   │   ├── page            # Page Object Models
 │   │   └── utils           # Utility methods
-│   └── test/java
-│       ├── listeners       # TestNG hooks for retry, screenshots, logging
-│       └── testcases       # E2E test scripts by domain
+│   └── test/java/sele3     # Testcases
 │   └── test/resources
+│       ├── languages       #  languages yaml file
+│       ├── profiles        #  properties files
 │       ├── suites          # TestNG XML files
-│       ├── testdata        # Structured test input
 │       └── selenide.properties #selenide config
 ```
 ## Pre-requites

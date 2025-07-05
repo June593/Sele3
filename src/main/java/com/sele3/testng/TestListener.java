@@ -58,25 +58,20 @@ public class TestListener implements ITestListener, IAnnotationTransformer, Step
                         .includeSelenideSteps(true)
         );
         RetryAnalyzer.init(context);
-        logger.info(String.format("RETRY_TYE: [%s], RETRY_COUNT: [%d]", RetryAnalyzer.RETRY_TYPE, RetryAnalyzer.MAX_RETRY));
     }
 
     @Override
     public void onFinish(ITestContext context) {
     }
 
-
-    @Override
-    public void transform(
-            ITestAnnotation annotation,
-            Class testClass,
-            Constructor testConstructor,
-            Method testMethod) {
-
-        if ("immediate".equalsIgnoreCase(RetryAnalyzer.RETRY_TYPE)) {
-            annotation.setRetryAnalyzer(RetryAnalyzer.class);
+        @Override
+        public void transform(
+                ITestAnnotation annotation,
+                Class testClass,
+                Constructor testConstructor,
+                Method testMethod) {
+                annotation.setRetryAnalyzer(RetryAnalyzer.class);
         }
-    }
 
     @Override
     public void onTestStart(ITestResult result) {

@@ -51,7 +51,16 @@
             <artifactId>testng</artifactId>
             <version>7.7.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>2.0</version><!-- or the latest -->
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.14.0</version>
+        </dependency>
         <!-- Retry logic -->
         <dependency>
             <groupId>com.github.automatedowl</groupId>

@@ -1,0 +1,13 @@
+button:
+  close: "Close"
+  search: "SEARCH"
+filter:
+  popular_filter: "Popular filters"
+  property_type: "Property type"
+  star_rating: "Star rating"
+checkbox:
+  4_stars: "4-Star rating"
+  3_stars: "3-Star rating"
+slider:
+  min: "MIN"
+  max: "MAX"
