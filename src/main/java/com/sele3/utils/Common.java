@@ -8,9 +8,7 @@ public class Common {
         return list.stream().sorted().collect(Collectors.toList());
     }
 
-    public static Integer convertMoneyToNumber(String money) {
-        String numeric = money.replaceAll("[^0-9]", "");
-        return Integer.parseInt(numeric);
+    public static Integer changeMoneyValueToOnlyMoneyNumber(String moneyText) {
+        return Integer.parseInt(moneyText.replaceAll("[^0-9]", ""));
     }
-
 }
