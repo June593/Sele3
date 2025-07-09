@@ -1,13 +1,23 @@
 button:
   close: "Đóng"
   search: "TÌM"
-filter:
+filter_types:
   popular_filter: "Bộ lọc phổ biến"
   property_type: "Loại hình nơi ở"
   star_rating: "Xếp hạng sao"
-checkbox:
-  4_stars: "4-Đánh giá sao"
-  3_stars: "3-Đánh giá sao"
+  property_facilities: "Tiện nghi chỗ nghỉ"
+star_rating_options:
+  4_stars: "4"
+  3_stars: "3"
+property_facilities_options:
+  non_smoking: "Không hút thuốc"
+  swimming_pool: "Bể bơi"
 slider:
   min: "TỐI THIỂU"
   max: "TỐI ĐA"
+review_type:
+  location: "Vị trí"
+  cleanliness: "Sạch sẽ"
+  service: "Dịch vụ"
+  facilities: "Cơ sở vật chất"
+  value_for_money: "Đáng giá tiền"

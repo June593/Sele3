@@ -1,13 +1,23 @@
 button:
   close: "Close"
   search: "SEARCH"
-filter:
+filter_types:
   popular_filter: "Popular filters"
   property_type: "Property type"
   star_rating: "Star rating"
-checkbox:
-  4_stars: "4-Star rating"
-  3_stars: "3-Star rating"
+  property_facilities: "Property facilities"
+star_rating_options:
+  4_stars: "4"
+  3_stars: "3"
+property_facilities_options:
+  non_smoking: "Non-smoking"
+  swimming_pool: "Swimming pool"
 slider:
   min: "MIN"
   max: "MAX"
+review_type:
+  location: "Location"
+  cleanliness: "Cleanliness"
+  service: "Service"
+  facilities: "Facilities"
+  value_for_money: "Value for money"
