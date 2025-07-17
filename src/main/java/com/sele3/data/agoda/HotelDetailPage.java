@@ -1,5 +1,6 @@
 package com.sele3.data.agoda;
 
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
@@ -8,7 +9,9 @@ import com.sele3.utils.Constants;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.qameta.allure.model.Status;
+import org.openqa.selenium.WebElement;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -21,21 +24,27 @@ public class HotelDetailPage {
      * Get the hotel name.
      */
     public String getName() {
-        return name.getText().trim();
+        return name.shouldBe(Condition.visible).getText().trim();
     }
 
     /**
      * Get the hotel address (before the first hyphen).
      */
     public String getAddress() {
-        return address.getText().split("-")[0].trim();
+        return address.shouldBe(Condition.visible).getText();
     }
 
     /**
      * Get the list of special benefits offered by the hotel.
+     *
+     * @return List of special benefit texts. Returns empty list if none are visible.
      */
     public List<String> getSpecialBenefitList() {
-        return specialBenefits.texts();
+        specialBenefits.shouldBe(CollectionCondition.allMatch("All benefits must be visible",
+                WebElement::isDisplayed), Duration.ofSeconds(10));
+        return specialBenefits.stream()
+                .map(SelenideElement::getText)
+                .collect(Collectors.toList());
     }
 
     @Step("Hover on point of the hotel button ")
@@ -67,27 +76,9 @@ public class HotelDetailPage {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Check if the hotel address on the detail page matches the one from the result page.
-     *
-     * @param addressInDetailsPage The full address from the detail page
-     * @param addressInResultPage  The partial address from the search result page
-     * @return true if the detail page address contains the result page address
-     */
-    public boolean isHotelAddressMatched(String addressInDetailsPage, String addressInResultPage) {
-        if (!addressInDetailsPage.contains(addressInResultPage)) {
-            Allure.step(String.format(
-                    "The address on the detail page '%s' does not contain '%s'",
-                    addressInDetailsPage, addressInResultPage
-            ), Status.FAILED);
-            return false;
-        }
-        return true;
-    }
-
     private SelenideElement name = $("h1[data-selenium='hotel-header-name']");
     private SelenideElement address = $("span[data-selenium='hotel-address-map']");
-    private ElementsCollection specialBenefits = $$("div[data-element-value='available']");
+    private ElementsCollection specialBenefits = $$x("//div[@data-element-name='property-feature']");
     private SelenideElement showReviewTooltipButton = $("button[data-testid='review-tooltip-icon']");
     private SelenideElement reviewTooltip = $("div[data-testid='floater-container']");
     private ElementsCollection reviewName = $$x("//div[contains(@class,'Review-travelerGrade-Cell')]//span");

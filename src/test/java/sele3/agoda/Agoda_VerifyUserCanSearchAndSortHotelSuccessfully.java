@@ -36,17 +36,15 @@ public class Agoda_VerifyUserCanSearchAndSortHotelSuccessfully extends TestBase 
                 .build();
     }
 
-    @Test(description = "TC01 - Agoda - Search and sort hotel successfully")
+    @Test(groups = "agoda", description = "TC01 - Agoda - Search and sort hotel successfully")
     public void agoda_VerifyUserCanSearchAndSortHotelSuccessfully() {
         generalPage.openPage();
         homePage.closeAds();
         homePage.searchHotel(searchHotelData);
-        searchResultPage.scrollUntilAllHotelDataLoaded(5);
 
         Assertion.assertTrue(searchResultPage.areAllDisplayedDestinationsRelevant(5, destination), String.format("VP: Verify that the first 5 hotel destinations are relevant to the search keyword: %s", destination));
 
         searchResultPage.clickLowestPriceFirstButton();
-        searchResultPage.scrollUntilAllHotelDataLoaded(5);
         priceList = searchResultPage.getPriceList(5);
 
         Assertion.assertEquals(priceList, Common.sort(priceList), "VP: Verify that the first 5 hotel prices are sorted in ascending order");

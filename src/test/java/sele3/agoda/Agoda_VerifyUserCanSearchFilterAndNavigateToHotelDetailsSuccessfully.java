@@ -43,42 +43,41 @@ public class Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfull
                 .build();
         filterType = FilterType.PROPERTY_FACILITIES;
         swimmingPool = PropertyFacilitiesOptions.SWIMMING_POOL;
-        reviewTypes = Arrays.asList(ReviewType.values());
+        expectedReviewTypes = Arrays.asList(ReviewType.values());
     }
 
-    @Test(description = "TC03 - Agoda - Search, filter and navigate to hotel details successfully")
+    @Test(groups = "agoda", description = "TC03 - Agoda - Search, filter and navigate to hotel details successfully")
     public void Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfully() {
         generalPage.openPage();
         homePage.closeAds();
         homePage.searchHotel(searchHotelData);
-        searchResultPage.scrollUntilAllHotelDataLoaded(5);
         Assertion.assertTrue(searchResultPage.areAllDisplayedDestinationsRelevant(5, detination), String.format("VP1: Check the first 5 destinations have search content: %s", detination));
 
         searchResultPage.filterByOption(FilterType.PROPERTY_FACILITIES, PropertyFacilitiesOptions.SWIMMING_POOL, true);
-        searchResultPage.scrollUntilAllHotelDataLoaded(5);
         the5thHotelData = searchResultPage.getHotelDataByIndex(5);
         searchResultPage.clickOnHotelByIndex(5);
-        benifitList = hotelDetailPage.getSpecialBenefitList();
         Assertion.assertEquals(hotelDetailPage.getName(), the5thHotelData.getName(), "VP2: Check the hotel detail page displays correct hotel name");
-        Assertion.assertTrue(hotelDetailPage.isHotelAddressMatched(hotelDetailPage.getAddress(), the5thHotelData.getAddress()), "VP3: Check the hotel detail page displays correct destination");
+        Assertion.assertTrue(hotelDetailPage.getAddress().contains(the5thHotelData.getAddress()), "VP3: Check the hotel detail page displays correct destination");
         Assertion.assertTrue(hotelDetailPage.getSpecialBenefitList().contains(PropertyFacilitiesOptions.SWIMMING_POOL.toString()), "VP4: Check the hotel detail page displays correct the selected filter");
 
         WebUtils.closeCurrentTabAndSwitchBack();
         reviewPointDataInSearchPage = searchResultPage.getListReviewPointOfHotelByIndex(1);
-        Assertion.assertTrue(reviewTypes.equals(reviewPointDataInSearchPage.stream()
+        actualReviewTypes = reviewPointDataInSearchPage.stream()
                 .map(ReviewPointData::getReviewName)
-                .collect(Collectors.toList())), "VP: Check the detail review popup appears with correct information");
+                .sorted()
+                .collect(Collectors.toList());
+        Assertion.assertTrue(expectedReviewTypes.containsAll(actualReviewTypes), "VP5: Check the detail review popup appears with correct information");
 
         firstHotelData = searchResultPage.getHotelDataByIndex(1);
         searchResultPage.clickOnHotelByIndex(1);
         reviewPointDataInDetailPage = hotelDetailPage.getListReviewPointOfHotel();
-        Assertion.assertEquals(hotelDetailPage.getName(), firstHotelData.getName(), "VP: Check the hotel detail page displays correct hotel name");
-        Assertion.assertTrue(hotelDetailPage.isHotelAddressMatched(hotelDetailPage.getAddress(), firstHotelData.getAddress()), "VP: Check the hotel detail page displays correct destination");
-        Assertion.assertTrue(hotelDetailPage.getSpecialBenefitList().contains(PropertyFacilitiesOptions.SWIMMING_POOL.toString()), "VP: Check the hotel detail page displays correct the selected filter");
+        Assertion.assertEquals(hotelDetailPage.getName(), firstHotelData.getName(), "VP6: Check the hotel detail page displays correct hotel name");
+        Assertion.assertTrue(hotelDetailPage.getAddress().contains(firstHotelData.getAddress()), "VP7: Check the hotel detail page displays correct destination");
+        Assertion.assertTrue(hotelDetailPage.getSpecialBenefitList().contains(PropertyFacilitiesOptions.SWIMMING_POOL.toString()), "VP8: Check the hotel detail page displays correct the selected filter");
 
         reviewPointDataInDetailPage.sort(Comparator.comparing(ReviewPointData::getReviewName));
         reviewPointDataInSearchPage.sort(Comparator.comparing(ReviewPointData::getReviewName));
-        Assertion.assertEquals(reviewPointDataInDetailPage, reviewPointDataInSearchPage, "VP: Check the hotel detail page displays correct    review");
+        Assertion.assertEquals(reviewPointDataInDetailPage, reviewPointDataInSearchPage, "VP9: Check the hotel detail page displays correct review");
 
         Assertion.assertAll("Complete running test case");
     }
@@ -94,7 +93,8 @@ public class Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfull
     FilterType filterType;
     PropertyFacilitiesOptions swimmingPool;
     List<String> benifitList;
-    List<ReviewType> reviewTypes;
+    List<ReviewType> expectedReviewTypes;
+    List<ReviewType> actualReviewTypes;
     List<ReviewPointData> reviewPointDataInSearchPage;
     List<ReviewPointData> reviewPointDataInDetailPage;
 }

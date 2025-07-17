@@ -21,11 +21,11 @@ public class Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully extends TestBas
 
     @BeforeMethod
     public void setUp() {
-        detination = "Da Nang";
+        destination = "Da Nang";
         nextFriday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
         threeDaysFromNextFriday = nextFriday.plusDays(3);
         searchHotelData = SearchHotelData.builder()
-                .place(detination)
+                .place(destination)
                 .fromDate(nextFriday)
                 .toDate(threeDaysFromNextFriday)
                 .isDayUseStays(false)
@@ -47,14 +47,13 @@ public class Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully extends TestBas
                 .build();
     }
 
-    @Test(description = "TC02 - Agoda - Search and filter hotel successfully")
+    @Test(groups = "agoda", description = "TC02 - Agoda - Search and filter hotel successfully")
     public void agoda_VerifyUserCanSearchAndFilterHotelSuccessfully() {
         generalPage.openPage();
         homePage.closeAds();
 
         homePage.searchHotel(searchHotelData);
-        searchResultPage.scrollUntilAllHotelDataLoaded(5);
-        Assertion.assertTrue(searchResultPage.areAllDisplayedDestinationsRelevant(5, detination), String.format("VP: Verify that the first 5 destinations contain the search keyword: %s", detination));
+        Assertion.assertTrue(searchResultPage.areAllDisplayedDestinationsRelevant(5, destination), String.format("VP: Verify that the first 5 destinations contain the search keyword: %s", destination));
 
         defaultMinPrice = searchResultPage.getMinPrice();
         defaultMaxPrice = searchResultPage.getMaxPrice();
@@ -62,8 +61,7 @@ public class Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully extends TestBas
         searchResultPage.filterHotel(filterHotelData);
         Assertion.assertTrue(searchResultPage.areAllSelectedFiltersHighlighted(filterHotelData), String.format("VP: Verify that all selected filters are highlighted."));
 
-        searchResultPage.scrollUntilAllHotelDataLoaded(5);
-        Assertion.assertTrue(searchResultPage.areAllDisplayedDestinationsRelevant(5, detination), String.format("VP: Verify that the first 5 destinations contain the search keyword: %s", detination));
+        Assertion.assertTrue(searchResultPage.areAllDisplayedDestinationsRelevant(5, destination), String.format("VP: Verify that the first 5 destinations contain the search keyword: %s", destination));
 
         Assertion.assertTrue(searchResultPage.areAllPricesInExpectedRange(5, filterHotelData.getMinPrice(), filterHotelData.getMaxPrice()), String.format("VP: Verify that the prices of the first 5 results are within the range: %d - %d", filterHotelData.getMinPrice(), filterHotelData.getMaxPrice()));
         Assertion.assertTrue(searchResultPage.areAllResultsWithinSelectedRating(5, StarRatingOption.RATING_FOUR_STAR), String.format("VP: Verify that the star ratings of the first 5 results match the selected rating: %s", StarRatingOption.RATING_FOUR_STAR));
@@ -78,7 +76,7 @@ public class Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully extends TestBas
 
     HomePage homePage = new HomePage();
     GeneralPage generalPage = new GeneralPage();
-    String detination;
+    String destination;
     LocalDate nextFriday, threeDaysFromNextFriday;
     SearchHotelData searchHotelData;
     FilterHotelData filterHotelData;

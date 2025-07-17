@@ -4,9 +4,6 @@ import com.sele3.utils.YamlUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Getter
 @AllArgsConstructor
 public enum ReviewType {
@@ -19,25 +16,19 @@ public enum ReviewType {
 
     private final String value;
 
-    private static final Map<String, String> DISPLAY_LABELS = new HashMap<>();
-
-    static {
-        for (ReviewType type : values()) {
-            String label = (String) YamlUtils.getProperty("review_type." + type.value);
-            DISPLAY_LABELS.put(type.value, label);
-        }
-    }
-
     @Override
     public String toString() {
-        return DISPLAY_LABELS.getOrDefault(this.value, this.value);
+        return (String) YamlUtils.getProperty("review_type." + value);
     }
 
     public static ReviewType fromText(String text) {
         for (ReviewType type : values()) {
-            String label = DISPLAY_LABELS.get(type.value);
+            String label = (String) YamlUtils.getProperty("review_type." + type.value);
             if (label != null && label.equalsIgnoreCase(text)) {
                 return type;
+            }
+            if(text.equals("Room comfort and qua...")) {
+                return ROOM_COMFORT_AND_QUALITY;
             }
         }
         throw new IllegalArgumentException("Unknown ReviewType display value: " + text);

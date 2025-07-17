@@ -7,8 +7,8 @@ filter_types:
   star_rating: "Xếp hạng sao"
   property_facilities: "Tiện nghi chỗ nghỉ"
 star_rating_options:
-  4_stars: "4"
-  3_stars: "3"
+  4_stars: "4-Đánh giá sao"
+  3_stars: "3-Đánh giá sao"
 property_facilities_options:
   non_smoking: "Không hút thuốc"
   swimming_pool: "Bể bơi"
@@ -21,3 +21,4 @@ review_type:
   service: "Dịch vụ"
   facilities: "Cơ sở vật chất"
   value_for_money: "Đáng giá tiền"
+  room_comfort_and_quantity: "Sự thoải mái và chất lượng phòng"

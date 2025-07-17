@@ -16,6 +16,7 @@ import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.qameta.allure.model.Status;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -26,77 +27,41 @@ import static com.codeborne.selenide.Selenide.*;
 public class SearchResultPage {
 
     /**
-     * Scrolls the page until the expected number of hotels are loaded.
-     *
-     * @param expectedHotelCount Number of hotels expected to be loaded
-     */
-    @Step("Scroll until {expectedHotelCount} hotels are fully loaded")
-    public void scrollUntilAllHotelDataLoaded(int expectedHotelCount) {
-        final int maxRetries = 20;
-        final int waitBetweenScrollsMs = 500;
-        int retries = 0;
-
-        while (price.size() < expectedHotelCount && retries++ < maxRetries) {
-            waitForHotelImgLoading();
-
-            if (!price.isEmpty()) {
-                price.last()
-                        .shouldBe(Condition.visible, Constants.MEDIUM_TIMEOUT)
-                        .scrollIntoView(true);
-            }
-            Selenide.sleep(waitBetweenScrollsMs);
-        }
-        if (price.size() < expectedHotelCount) {
-            Allure.step(
-                    String.format("Only %d hotels loaded after scrolling (expected: %d). Consider increasing maxRetries.",
-                            price.size(), expectedHotelCount),
-                    Status.FAILED
-            );
-        }
-        header.scrollIntoView(true);
-        waitForHotelImgLoading();
-    }
-
-    /**
      * Get all the hotel prices
      *
      * @param hotelNumber Number of hotel need to get
      * @return List of all prices
      */
     public List<Integer> getPriceList(Integer hotelNumber) {
-        List<String> allPrices = price.texts();
-        if (Objects.nonNull(hotelNumber)) {
-            if (hotelNumber > allPrices.size()) {
-                String errorMessage = String.format("Page only show %d instead of %d result(s). Scroll down for more results", allPrices.size(), hotelNumber);
-                Allure.step(String.format(errorMessage), Status.FAILED);
-                throw new IllegalStateException(errorMessage);
-            }
-            allPrices = allPrices.subList(0, hotelNumber);
+        List<Integer> allPrices = new ArrayList<>();
+        for (int i = 0; i < hotelNumber; i++) {
+            SelenideElement item = price.get(i);
+            item.scrollIntoView(true);
+            item.shouldBe(Condition.visible, Constants.MEDIUM_TIMEOUT);
+            Integer text = Integer.parseInt(item.getText().replaceAll("[^0-9]", ""));
+            allPrices.add(text);
         }
-        return allPrices.stream()
-                .map(e -> e.replaceAll("[^0-9]", ""))
-                .map(Integer::parseInt)
-                .collect(Collectors.toList());
+        return allPrices;
     }
 
     /**
-     * Get all the hotel area city
+     * Get a list of destination names from the search result.
+     * Scrolls to each destination element before retrieving its text.
      *
-     * @param hotelNumber Number of hotel need to get
-     * @return List of all area city
+     * @param hotelNumber Number of destinations to retrieve (nullable). If null, return all.
+     * @return List of destination names
      */
     public List<String> getDestinationList(Integer hotelNumber) {
-        List<String> allDestinations = destination.texts().stream().map(x -> x.split(" - ")[0]).collect(Collectors.toUnmodifiableList());
-        if (Objects.nonNull(hotelNumber)) {
-            if (hotelNumber > allDestinations.size()) {
-                String errorMessage = String.format("Page only show %d instead of %d result(s). Scroll down for more results", allDestinations.size(), hotelNumber);
-                Allure.step(String.format(errorMessage), Status.FAILED);
-                throw new IllegalStateException(errorMessage);
-            }
-            allDestinations = allDestinations.subList(0, hotelNumber);
+        List<String> allDestinations = new ArrayList<>();
+        for (int i = 0; i < hotelNumber; i++) {
+            SelenideElement item = destination.get(i);
+            item.scrollIntoView(true);
+            String text = item.getText().split(" - ")[0].trim();
+            allDestinations.add(text);
         }
         return allDestinations;
     }
+
 
     /**
      * Are all the destinations have search content
@@ -124,6 +89,7 @@ public class SearchResultPage {
 
     @Step("Click 'Lowes price first' button")
     public void clickLowestPriceFirstButton() {
+        lowestPriceButton.scrollIntoView(false);
         lowestPriceButton.click();
         waitForHotelImgLoading();
     }
@@ -138,10 +104,11 @@ public class SearchResultPage {
     }
 
     public void waitForHotelImgLoading() {
-        hotelImg.forEach(img ->
-                img.shouldBe(Condition.visible, Constants.MEDIUM_TIMEOUT)
-                        .shouldBe(Condition.image, Constants.MEDIUM_TIMEOUT)
-        );
+        for (int i = 0; i < hotelImg.size(); i++) {
+            SelenideElement img = hotelImg.get(i);
+            img.shouldBe(Condition.visible, Constants.MEDIUM_TIMEOUT);
+            img.shouldBe(Condition.image, Constants.MEDIUM_TIMEOUT);
+        }
     }
 
     private SelenideElement getSelectedCheckboxByValue(String value) {
@@ -179,7 +146,7 @@ public class SearchResultPage {
 
     private SelenideElement getCheckboxByFilterTypeAndOption(FilterType filterType, FilterValue filterValue) {
         return $x(String.format("//legend[contains(., '%s')]/..//span[.='%s']//ancestor::label//input", filterType.toString(), filterValue.toString()))
-                .shouldBe(Condition.exist);
+                .shouldBe(Condition.exist).scrollIntoView(true);
     }
 
     public boolean areAllSelectedFiltersHighlighted(FilterHotelData filterHotelData) {
@@ -188,7 +155,11 @@ public class SearchResultPage {
                 .map(f -> f.getFilterValue().toString())
                 .toList();
 
-        return optionValue.stream().allMatch(value -> getSelectedCheckboxByValue(value).isSelected())
+        return optionValue.stream()
+                .allMatch(value -> {
+                    String actualValue = value.matches("\\d+-Star.*") ? value.split("-")[0].trim() : value;
+                    return getSelectedCheckboxByValue(actualValue).isSelected();
+                })
                 && getMinPriceSlider() == filterHotelData.getMinPrice()
                 && getMaxPriceSlider() == filterHotelData.getMaxPrice();
     }
@@ -230,7 +201,6 @@ public class SearchResultPage {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -243,8 +213,8 @@ public class SearchResultPage {
      */
     public boolean areAllResultsWithinSelectedRating(Integer hotelNumber, StarRatingOption starRating) {
         List<Float> stars = getRatingList(hotelNumber);
-        int baseRating = Integer.parseInt(YamlUtils.getProperty("star_rating_options." + starRating.getValue()).toString());
-
+        String rawText = YamlUtils.getProperty("star_rating_options." + starRating.getValue()).toString();
+        int baseRating = Integer.parseInt(rawText.split("-")[0].trim());
         if (stars == null || stars.isEmpty()) {
             Allure.step("No rating results found", Status.FAILED);
             return false;
@@ -258,7 +228,6 @@ public class SearchResultPage {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -310,36 +279,34 @@ public class SearchResultPage {
     /**
      * Get a list of hotel names from the search result.
      *
-     * @param numberOfHotel Number of hotels to retrieve
+     * @param hotelNumber Number of hotels to retrieve
      * @return List of hotel names
      */
-    public List<String> getHotelNameList(int numberOfHotel) {
-        List<String> hotelNames = hotelName.texts();
-
-        if (Objects.nonNull(hotelNames)) {
-            if (numberOfHotel > hotelNames.size()) {
-                String errorMessage = String.format(
-                        "Only %d hotel(s) found on the page, but %d requested. Please scroll down to load more results.",
-                        hotelNames.size(), numberOfHotel
-                );
-                Allure.step(errorMessage, Status.FAILED);
-                throw new IllegalStateException(errorMessage);
-            }
-            hotelNames = hotelNames.subList(0, numberOfHotel);
+    public List<String> getHotelNameList(int hotelNumber) {
+        List<String> allHotelNames = new ArrayList<>();
+        for (int i = 0; i < hotelNumber; i++) {
+            SelenideElement item = hotelName.get(i);
+            item.scrollIntoView(true);
+            String text = item.getText();
+            allHotelNames.add(text);
         }
-
-        return hotelNames;
+        return allHotelNames;
     }
 
     @Step("Click on hotel at index: {0}")
     public void clickOnHotelByIndex(int index) {
-        hotelName.get(index - 1).shouldBe(Condition.visible).scrollIntoView(true).click();
+        hotelName.get(index - 1)
+                .scrollIntoView(false)
+                .shouldBe(Condition.visible).click();
         WebUtils.switchToNextTab();
     }
 
     @Step("Hover on point of the hotel button at index: {0}")
     public void hoverOnPointOfHotelButton(int index) {
-        pointOfHotelButton.get(index - 1).shouldBe(Condition.visible, Constants.MEDIUM_TIMEOUT).scrollIntoView(false).hover();
+        pointOfHotelButton.get(index - 1)
+                .scrollIntoView(true)
+                .shouldBe(Condition.visible, Constants.MEDIUM_TIMEOUT)
+                .hover();
     }
 
     /**
@@ -348,7 +315,7 @@ public class SearchResultPage {
      * @param hotelIndex the index of the hotel
      * @return List of ReviewPointData
      */
-    public List<ReviewPointData> getListReviewPointOfHotelByIndex(int hotelIndex) {
+    public List<ReviewPointData>getListReviewPointOfHotelByIndex(int hotelIndex) {
         hoverOnPointOfHotelButton(hotelIndex);
 
         return IntStream.range(0, reviewName.size())
@@ -368,11 +335,10 @@ public class SearchResultPage {
     private ElementsCollection price = $$x("//div[@data-element-name='final-price']");
     private ElementsCollection hotelImg = $$x("//li[@data-selenium='hotel-item']//button[@data-element-name='ssrweb-mainphoto']/img");
     private SelenideElement lowestPriceButton = $x("//button[@data-element-name='search-sort-price']");
-    private SelenideElement header = $("header");
     private SelenideElement minPriceTextBox = $("#price_box_0");
     private SelenideElement maxPriceTextBox = $("#price_box_1");
     private ElementsCollection rating = $$x("//div[@data-testid='rating-container']//span");
-    private ElementsCollection hotelName = $$x("//h3[@data-selenium='hotel-name']");
+    private ElementsCollection hotelName = $$x("//*[self::h3[@data-selenium='hotel-name'] or self::a[@data-testid='property-name-link']//span]");
     private ElementsCollection pointOfHotelButton = $$(".ReviewWithDemographic");
     private ElementsCollection reviewName = $$(".review-bar__name");
     private ElementsCollection reviewPoint = $$(".review-bar__point");
