@@ -8,12 +8,22 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 
 ### Implemented Features:
 - [x] Core framework built on Selenide
-- [x] Integrated HTML, Allure, and ReportPortal reports
-- [x] Retry logic for failed test cases
+- [ ] **Report**
+  - [x] Allure Report
+  - [ ] Report Portal
+- [ ] **Retry failed testcases**
+  - [x] Retry immediately after the testcase failed
+  - [ ] Retry failed testcases after all testcase done
+- [x] Parallel execution
 - [x] Parallel/distributed testing
 - [x] Cross browsers testing: Chrome, Safari
 - [x] Remote execution via Selenium Grid
-- [ ] Test cases: VJ, Agoda (1TC), TBD 
+- [ ] Implement testcase
+  - [x] Agoda - TC1
+  - [x] Agoda - TC2
+  - [x] Agoda - TC3
+  - [ ] Vietjet - TC1
+  - [ ] Vietjet - TC2
 - [x] Jenkins CI pipeline with scheduled runs and email reports
 - 
 ### User Cases
@@ -78,7 +88,7 @@ mvn clean test \
   -Dselenide.remote=http://localhost:4444 \ # only use this if you are running tests on Selenium Grid
   -Dselenide.baseUrl=https://www.agoda.com \
   -Dsurefire.suiteXmlFiles=src/test/resources/suites/AgodaRegression.xml \
-  -Dgroups=smoke \
+  -Dgroups=agoda \
   -Dparallel=methods \
   -DthreadCount=5 \
   -DmaxRetry=3 \

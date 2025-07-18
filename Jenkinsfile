@@ -59,7 +59,7 @@ pipeline {
 
                 emailext(
                     subject: "🔔 ${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
-                    to: 'june5.gaming2@gmail.com', 'thuong.dang@agest.vn'
+                    to: 'june5.gaming2@gmail.com, thuong.dang@agest.vn'
                     attachmentsPattern: "${ALLURE_REPORT}/index.html",
                     body: """
                         <p><b>Project:</b> ${env.JOB_NAME}</p>

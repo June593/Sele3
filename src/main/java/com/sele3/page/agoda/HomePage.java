@@ -109,7 +109,6 @@ public class HomePage {
         getButton((String) YamlUtils.getProperty("button.search")).click();
     }
 
-
     private SelenideElement getSelectDate(LocalDate date) {
         return $x(String.format("//span[@data-selenium-date='%s']", date.toString()))
                 .shouldBe(Condition.visible)
