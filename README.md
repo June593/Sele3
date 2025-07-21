@@ -27,7 +27,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 - [x] Jenkins CI pipeline with scheduled runs and email reports
 - 
 ### User Cases
-- [ ] Content testing
+- [x] Content testing
 - [x] Multiple languages testing
 - [x] Group tests by purposes: regression, smoke/sanity test
 - [x] Source control practice: branch

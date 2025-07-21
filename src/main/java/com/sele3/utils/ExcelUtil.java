@@ -2,40 +2,91 @@ package com.sele3.utils;
 
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.*;
+import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-public class ExcelUtil {
+    public class ExcelUtil {
 
-    public static String getCellValue(Cell cell) {
-        if (cell == null) return "";
-        cell.setCellType(CellType.STRING);
-        return cell.getStringCellValue().trim();
-    }
+        @SneakyThrows
+        public static <T> List<T> readFromExcel(@NotNull File excelFile,
+                                                @NotNull Function<Row, T> rowMapper) {
+            try (InputStream fis = new FileInputStream(excelFile);
+                 Workbook workbook = WorkbookFactory.create(fis)) {
 
-    @SneakyThrows
-    public static <T> List<T> readFromExcel(String filePath, Function<Row, T> rowMapper) {
-        List<T> result = new ArrayList<>();
+                Sheet sheet = workbook.getSheetAt(0);
+                Iterator<Row> rowIterator = sheet.iterator();
 
-        try (FileInputStream fis = new FileInputStream(filePath);
-             Workbook workbook = WorkbookFactory.create(fis)) {
+                // Skip header
+                if (rowIterator.hasNext()) rowIterator.next();
 
-            Sheet sheet = workbook.getSheetAt(0); // Hoặc getSheet("LeapFrom-games")
-            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
-                Row row = sheet.getRow(i);
-                if (row != null) {
-                    result.add(rowMapper.apply(row));
+                Iterable<Row> rowIterable = () -> rowIterator;
+
+                return StreamSupport.stream(rowIterable.spliterator(), false)
+                        .map(rowMapper)
+                        .collect(Collectors.toList());
+            }
+        }
+
+        public static Map<String, Integer> readHeaderMap(Row headerRow) {
+            Map<String, Integer> headerMap = new HashMap<>();
+            for (Cell cell : headerRow) {
+                headerMap.put(cell.getStringCellValue().trim().toLowerCase(), cell.getColumnIndex());
+            }
+            return headerMap;
+        }
+
+        @SneakyThrows
+        public static List<Map<String, String>> readAsMapList(@NotNull File excelFile) {
+            List<Map<String, String>> resultList = new ArrayList<>();
+
+            try (InputStream fis = new FileInputStream(excelFile);
+                 Workbook workbook = WorkbookFactory.create(fis)) {
+
+                Sheet sheet = workbook.getSheetAt(0);
+                Iterator<Row> rowIterator = sheet.iterator();
+
+                if (!rowIterator.hasNext()) return resultList;
+
+                Row headerRow = rowIterator.next();
+                List<String> headers = new ArrayList<>();
+                for (Cell cell : headerRow) {
+                    headers.add(cell.getStringCellValue().trim());
+                }
+
+                while (rowIterator.hasNext()) {
+                    Row row = rowIterator.next();
+                    Map<String, String> rowData = new LinkedHashMap<>();
+
+                    for (int i = 0; i < headers.size(); i++) {
+                        Cell cell = row.getCell(i, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
+                        String value = getCellValueAsString(cell);
+                        rowData.put(headers.get(i), value);
+                    }
+
+                    resultList.add(rowData);
                 }
             }
 
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to read Excel file: " + filePath, e);
+            return resultList;
         }
 
-        return result;
+        private static String getCellValueAsString(Cell cell) {
+            if (cell == null) return "";
+            return switch (cell.getCellType()) {
+                case STRING -> cell.getStringCellValue();
+                case NUMERIC -> String.valueOf(cell.getNumericCellValue());
+                case BOOLEAN -> String.valueOf(cell.getBooleanCellValue());
+                case FORMULA -> cell.getCellFormula();
+                case BLANK -> "";
+                default -> "";
+            };
+        }
     }
-}
+
