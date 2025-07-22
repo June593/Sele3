@@ -1,6 +1,5 @@
 package sele3.leapFrog;
 
-import com.codeborne.selenide.WebDriverRunner;
 import com.sele3.data.leapfrog.GameData;
 import com.sele3.page.leapfrog.LeapFrogPage;
 import com.sele3.utils.Assertion;
@@ -21,12 +20,9 @@ public class LeapFrogContentTest {
     public void compareGamesWithExcel() {
         open(String.format(LeapFrogPage.BASE_URL, 1));
         totalPages = leapFrogPage.getTotalPages();
-        List<Map<String, String>> raw = ExcelUtil.readAsMapList(new File(Constants.LEAPFROG_GAMES_FILE_PATH));
-        List<GameData> expectedList = raw.stream()
-                .map(map -> new GameData(map.get("title"), map.get("age"), map.get("price")))
-                .toList();
-        List<GameData> actualList = leapFrogPage.crawlActualData(totalPages);
-        GameDataComparator.compareGameData(expectedList, actualList);
+        List<GameData> gameDataListFromExcel = ExcelUtil.readFromExcel(new File(Constants.LEAPFROG_GAMES_FILE_PATH), GameData::fromRow);
+        List<GameData> gameDataListFromAllPages = leapFrogPage.getAllGameDataFromAllPages(totalPages);
+        GameDataComparator.compareGameData(gameDataListFromExcel, gameDataListFromAllPages);
         Assertion.assertAll("Completed");
     }
 

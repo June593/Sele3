@@ -40,8 +40,8 @@ public class LeapFrogPage {
                 .collect(Collectors.toList());
     }
 
-    @Step("Get actual data from LeapFrog site (total {pages} pages)")
-    public List<GameData> crawlActualData(int totalPages) {
+    @Step("Get game data from LeapFrog site (total {pages} pages)")
+    public List<GameData> getAllGameDataFromAllPages(int totalPages) {
         ExecutorService executor = Executors.newFixedThreadPool(5);
         List<Future<List<GameData>>> futures = new ArrayList<>();
         for (int i = 1; i <= totalPages; i++) {
