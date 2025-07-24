@@ -27,7 +27,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 - [x] Jenkins CI pipeline with scheduled runs and email reports
 - 
 ### User Cases
-- [ ] Content testing
+- [x] Content testing
 - [x] Multiple languages testing
 - [x] Group tests by purposes: regression, smoke/sanity test
 - [x] Source control practice: branch
@@ -87,7 +87,6 @@ mvn clean test \
   -Dselenide.pageLoadStrategy=normal \
   -Dselenide.remote=http://localhost:4444 \ # only use this if you are running tests on Selenium Grid
   -Dselenide.baseUrl=https://www.agoda.com \
-  -Dsurefire.suiteXmlFiles=src/test/resources/suites/AgodaRegression.xml \
   -Dgroups=agoda \
   -Dparallel=methods \
   -DthreadCount=5 \
@@ -139,15 +138,28 @@ In the Maven Apache Plugin to the POM.xml
 Provide the Location of testNG.xml file
 Example: `src/test/resources/suites/defaultSuite.xml`
 ```
- <configuration>
-    <suiteXmlFiles>
-        <suiteXmlFile>${suiteFile}</suiteXmlFile>
-    </suiteXmlFiles>
- </configuration>
+ <profiles>
+        <profile>
+            <id>testSuite</id>
+            <properties>
+                <suiteFile>src/test/resources/suites/testSuite.xml</suiteFile>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>testContent</id>
+            <properties>
+                <suiteFile>src/test/resources/suites/testContentSuite.xml</suiteFile>
+            </properties>
+        </profile>
+    </profiles>
 ```
 In command line, add this command
 
-```mvn clean test -DtestngFile=${suiteFile}.xml```
+```mvn clean test -P testSuite```
+```mvn clean test -P testContent```
+```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite.xml```
+
 
 
 ### Distributed testing

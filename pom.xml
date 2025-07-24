@@ -91,8 +91,23 @@
             <artifactId>aspectjweaver</artifactId>
             <version>1.9.20</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>5.2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>26.0.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
-
     <profiles>
         <profile>
             <id>testSuite</id>
@@ -102,9 +117,9 @@
         </profile>
 
         <profile>
-            <id>demoSuite</id>
+            <id>testContent</id>
             <properties>
-                <suiteFile>src/test/resources/suites/demoSuite.xml</suiteFile>
+                <suiteFile>src/test/resources/suites/testLeapFrogContent.xml</suiteFile>
             </properties>
         </profile>
     </profiles>
