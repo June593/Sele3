@@ -20,7 +20,7 @@ public class LeapFrogContentTest {
     public void compareGamesWithExcel() {
         open(String.format(LeapFrogPage.BASE_URL, 1));
         totalPages = leapFrogPage.getTotalPages();
-        List<GameData> gameDataListFromExcel = ExcelUtil.readFromExcel(new File(Constants.LEAPFROG_GAMES_FILE_PATH), GameData::fromRow);
+        List<GameData> gameDataListFromExcel = ExcelUtil.readGameDataListFromExcel(new File(Constants.LEAPFROG_GAMES_FILE_PATH));
         List<GameData> gameDataListFromAllPages = leapFrogPage.getAllGameDataFromAllPages(totalPages);
         GameDataComparator.compareGameData(gameDataListFromExcel, gameDataListFromAllPages);
         Assertion.assertAll("Completed");

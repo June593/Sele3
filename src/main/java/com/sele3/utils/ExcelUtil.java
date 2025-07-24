@@ -1,5 +1,6 @@
 package com.sele3.utils;
 
+import com.sele3.data.leapfrog.GameData;
 import lombok.SneakyThrows;
 import org.apache.poi.ss.usermodel.*;
 import org.jetbrains.annotations.NotNull;
@@ -100,5 +101,9 @@ public class ExcelUtil {
             case BLANK -> "";
             default -> "";
         };
+    }
+
+    public static List<GameData> readGameDataListFromExcel(File file) {
+        return readFromExcel(file, GameData::fromRow);
     }
 }

@@ -117,9 +117,9 @@
         </profile>
 
         <profile>
-            <id>demoSuite</id>
+            <id>testContent</id>
             <properties>
-                <suiteFile>src/test/resources/suites/demoSuite.xml</suiteFile>
+                <suiteFile>src/test/resources/suites/testLeapFrogContent.xml</suiteFile>
             </properties>
         </profile>
     </profiles>
