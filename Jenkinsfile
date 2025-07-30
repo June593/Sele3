@@ -23,9 +23,11 @@ pipeline {
             }
         }
 
-        stage('Clean & Test') {
+        stage('Run All Test Suites') {
             steps {
-                sh 'mvn clean test'
+             sh 'rm -rf allure-results'
+             sh 'mvn clean test -Dsurefire.suiteXmlFiles=src/test/resources/suites/testSuite_agoda.xml'
+             sh 'mvn test -Dsurefire.suiteXmlFiles=src/test/resources/suites/testSuite_vj.xml'
             }
         }
 
@@ -80,3 +82,4 @@ pipeline {
         }
     }
 }
+

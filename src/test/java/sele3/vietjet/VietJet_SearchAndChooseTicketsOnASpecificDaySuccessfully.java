@@ -40,6 +40,8 @@ public class VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully extends Te
     public void VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully() {
         generalPage.openPage();
         homePage.acceptCookie();
+        homePage.closeNotificationModal();
+
         homePage.searchTicket(searchTicketData);
         selectFlightPage.closeAdsDialogIfVisible();
 
