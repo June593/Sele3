@@ -107,21 +107,32 @@
             <version>26.0.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.13.0</version>
+        </dependency>
     </dependencies>
     <profiles>
         <profile>
-            <id>testSuite</id>
+            <id>testSuite_agoda</id>
             <properties>
-                <suiteFile>src/test/resources/suites/testSuite.xml</suiteFile>
+                <suiteFile>src/test/resources/suites/testSuite_agoda.xml</suiteFile>
             </properties>
         </profile>
-
+        <profile>
+            <id>testSuite_vj</id>
+            <properties>
+                <suiteFile>src/test/resources/suites/testSuite_vj.xml</suiteFile>
+            </properties>
+        </profile>
         <profile>
             <id>testContent</id>
             <properties>
-                <suiteFile>src/test/resources/suites/testLeapFrogContent.xml</suiteFile>
+                <suiteFile>src/test/resources/suites/testContentSuite.xml</suiteFile>
             </properties>
         </profile>
+
     </profiles>
 
     <build>
