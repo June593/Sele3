@@ -23,12 +23,21 @@ pipeline {
             }
         }
 
-        stage('Clean & Test') {
-            steps {
-                sh 'mvn clean test'
-            }
-        }
-
+      stage('Run Agoda Test') {
+          steps {
+              sh 'mvn clean test -P testSuite_agoda'
+          }
+      }
+      stage('Run VietJet Test') {
+          steps {
+              sh 'mvn clean test -P testSuite_vj'
+          }
+      }
+      stage('Run Content Test') {
+          steps {
+               sh 'mvn clean test -P testContent'
+          }
+      }
         stage('JUnit Summary') {
             steps {
                 junit 'target/surefire-reports/*.xml'

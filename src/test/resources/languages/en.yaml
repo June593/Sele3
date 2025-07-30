@@ -29,6 +29,7 @@ config:
   day_month_format: "MMMM d"
   month_year_format: "MMMM yyyy"
   locale: "en"
+  displaying_language: "English"
 labelType:
   from: "From"
   to: "To"

@@ -6,10 +6,15 @@
     <parameter name="maxRetry" value="0"/>
     <parameter name="browser" value="chrome"/>
     <parameter name="environment" value="vietjet"/>
-    <parameter name="language" value="en"/>
+
     <test name="VietJetTest">
         <classes>
-            <class name="sele3.vietjet.VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully"/>
+            <class name="sele3.vietjet.VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully">
+                <parameter name="language" value="en"/>
+            </class>
+            <class name="sele3.vietjet.Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months">
+                <parameter name="language" value="vi"/>
+            </class>
         </classes>
     </test>
 </suite>

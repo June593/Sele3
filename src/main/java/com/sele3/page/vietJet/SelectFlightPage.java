@@ -80,7 +80,7 @@ public class SelectFlightPage {
     }
 
     public String getFromPlace() {
-        return $x(String.format(placeInTopBanner, LabelType.FROM)).getText().split("\\(")[0].trim();
+        return $x(String.format(placeInTopBanner, LabelType.FROM)).shouldBe(Condition.visible).getText().split("\\(")[0].trim();
     }
 
     public String getToPlace() {
@@ -173,6 +173,7 @@ public class SelectFlightPage {
 
     private SelenideElement selectedDate = $x("//div[contains(@class, 'slick-current')]//p[2]");
     private ElementsCollection price = $$x("//div[contains(@class, 'MuiGrid-root')]//div[p[contains(@class, 'MuiTypography-h4') and not(@variantlg)]]");
+//private ElementsCollection price = $$x("//p[.='000 VND']/preceding-sibling::p");
     private String placeInTopBanner = "//span[.='%s']/following-sibling::span";
     private String passengerText = "//p[@variantmd='h3']//span[contains(.,'%s')]";
     private String button = "//button[contains(@class, 'MuiButtonBase-root') and span[.=\"%s\"]]";

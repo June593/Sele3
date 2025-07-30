@@ -23,7 +23,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
   - [x] Agoda - TC2
   - [x] Agoda - TC3
   - [x] Vietjet - TC1
-  - [ ] Vietjet - TC2
+  - [x] Vietjet - TC2
 - [x] Jenkins CI pipeline with scheduled runs and email reports
 - 
 ### User Cases
