@@ -1,6 +1,8 @@
 button:
   close: "Đóng"
   search: "TÌM"
+  letgo: "Tìm chuyến bay"
+  continue: "Đi tiếp"
 filter_types:
   popular_filter: "Bộ lọc phổ biến"
   property_type: "Loại hình nơi ở"
@@ -22,3 +24,19 @@ review_type:
   facilities: "Cơ sở vật chất"
   value_for_money: "Đáng giá tiền"
   room_comfort_and_quantity: "Sự thoải mái và chất lượng phòng"
+config:
+  locale: "vi"
+  datetime_format: "dd/MM/yyyy"
+  day_month_format: "d 'tháng' M"
+  month_year_format: "'tháng' MM yyyy"
+labelType:
+  from: "Điểm khởi hành"
+  to: "Điểm đến"
+  passenger: "Hành khách"
+  adult: "Người lớn"
+  children: "Trẻ em"
+  infant: "Em bé"
+label_Passenger_Page:
+  passenger_info: "Thông tin hành khách"
+  departure_flight: "Chuyến đi"
+  return_flight: "Chuyến về"
