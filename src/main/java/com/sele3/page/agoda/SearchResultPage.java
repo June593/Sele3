@@ -16,6 +16,7 @@ import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import io.qameta.allure.model.Status;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -304,7 +305,7 @@ public class SearchResultPage {
     @Step("Hover on point of the hotel button at index: {0}")
     public void hoverOnPointOfHotelButton(int index) {
         pointOfHotelButton.get(index - 1)
-                .scrollIntoView(true)
+                .scrollIntoView(false)
                 .shouldBe(Condition.visible, Constants.MEDIUM_TIMEOUT)
                 .hover();
     }

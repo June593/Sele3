@@ -30,6 +30,8 @@ public class VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully extends Te
                 .returnDate(returnDate)
                 .passenger(Passenger.builder()
                         .adultNumber(2)
+                        .infantNumber(0)
+                        .childrenNumber(0)
                         .build())
                 .build();
     }
@@ -39,7 +41,7 @@ public class VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully extends Te
         generalPage.openPage();
         homePage.acceptCookie();
         homePage.searchTicket(searchTicketData);
-        selectFlightPage.closePromoDialogIfVisible();
+        selectFlightPage.closeAdsDialogIfVisible();
 
         Assertion.assertTrue(selectFlightPage.isSelectTravelOptionsPageDisplayed(), "VP: Verify that the Select Travel Options page is displayed.");
         Assertion.assertTrue(selectFlightPage.allPricesHaveVND(), "VP: Verify that all ticket prices are displayed in VND.");
@@ -50,8 +52,10 @@ public class VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully extends Te
 
         selectFlightPage.selectTheFirstCheapestTicket();
         departureInfo = selectFlightPage.getDepartureTicketInfo();
+        selectFlightPage. clickContinueButton();
         selectFlightPage.selectTheFirstCheapestTicket();
         returnInfo = selectFlightPage.getReturnTicketInfo();
+        selectFlightPage. clickContinueButton();
 
         Assertion.assertTrue(passengerInformationPage.isPageDisplayed(), "VP: Verify that the Passenger Information page is displayed.");
         Assertion.assertEquals(departureInfo, passengerInformationPage.getDepartureTicketInfo(), "VP: Verify that the departure flight information is correct.");

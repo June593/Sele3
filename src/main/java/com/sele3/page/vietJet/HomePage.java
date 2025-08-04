@@ -2,6 +2,7 @@ package com.sele3.page.vietJet;
 
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.sele3.data.vietjet.Passenger;
 import com.sele3.data.vietjet.SearchTicketData;
@@ -29,7 +30,7 @@ public class HomePage {
         if (Objects.nonNull(searchTicketData.getFrom())) {
             searchAndSelectLocation(LabelType.FROM, searchTicketData.getFrom());
         }
-        if (Objects.nonNull(searchTicketData.getFrom())) {
+        if (Objects.nonNull(searchTicketData.getTo())) {
             searchAndSelectLocation(LabelType.TO, searchTicketData.getTo());
         }
         if (Objects.nonNull(searchTicketData.getDepartureDate())) {
@@ -67,52 +68,41 @@ public class HomePage {
 
         calendarWrapper.shouldBe(Condition.visible);
 
-        while (true) {
-            boolean notFound = true;
-
-            for (SelenideElement el : $$(".rdrMonthName")) {
-                if (el.getText().trim().equals(monthYear)) {
-                    notFound = false;
-                    break;
-                }
-            }
-            if (!notFound) {
-                break;
-            }
+        while ($$(".rdrMonthName").stream().noneMatch(el -> el.getText().trim().equals(monthYear))) {
             $(".rdrNextButton").click();
         }
 
         SelenideElement targetMonth = $$(".rdrMonth").stream()
                 .filter(month -> month.$(".rdrMonthName").getText().equals(monthYear))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy tháng: " + monthYear));
+                .orElseThrow(() -> new RuntimeException(YamlUtils.getProperty("error.monthNotFound") + ": " + monthYear));
 
         targetMonth.$$(".rdrDay").stream()
                 .filter(el -> el.$(".rdrDayNumber > span").getText().equals(day))
                 .filter(el -> !el.getAttribute("class").contains("rdrDayDisabled"))
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Không tìm thấy ngày hợp lệ: " + day + " " + monthYear))
+                .orElseThrow(() -> new RuntimeException(YamlUtils.getProperty("error.validDayNotFound") + ": " + day + " " + monthYear))
                 .click();
     }
 
     @Step("Search and select location: {labelType} - {location}")
     public void searchAndSelectLocation(LabelType labelType, String location) {
         String from = (String) YamlUtils.getProperty("labelType.from");
-        String to = (String) YamlUtils.getProperty("labelType.to");
         SelenideElement inputField;
         if (labelType.equals(LabelType.FROM)) {
-            inputField = $$("label").findBy(Condition.text(from)).parent().$("input");
+            inputField = $x(String.format(dynamicPlaceTextBox, from));
+            inputField.shouldBe(Condition.visible).click();
+            inputField.setValue(location);
+            SelenideElement dropdownOption = $$("div.MuiBox-root").findBy(Condition.text(location));
+            dropdownOption.shouldBe(Condition.visible).click();
         } else if (labelType.equals(LabelType.TO)) {
-            inputField = $$("label").findBy(Condition.text(to)).parent().$("input");
+            inputField = $("#arrivalPlaceDesktop");
+            inputField.shouldBe(Condition.visible).setValue(location);
+            SelenideElement dropdownOption = $$("div.MuiBox-root").findBy(Condition.text(location));
+            dropdownOption.shouldBe(Condition.visible).click();
         } else {
-            throw new IllegalArgumentException("Loại địa điểm không hợp lệ. Chỉ nhận 'From' hoặc 'To'");
+            throw new IllegalArgumentException((String) YamlUtils.getProperty("error.invalidLocationType"));
         }
-
-        inputField.shouldBe(Condition.visible).click();
-        inputField.setValue(location);
-
-        SelenideElement dropdownOption = $$("div.MuiBox-root").findBy(Condition.text(location));
-        dropdownOption.shouldBe(Condition.visible).click();
     }
 
     private void selectNumber(LabelType labelType, int targetNumber) {
@@ -155,6 +145,8 @@ public class HomePage {
     private SelenideElement acceptDialog = $x("//div[@role='dialog']//span/h5");
     private SelenideElement lateButton = $("#NC_CTA_TWO");
     private SelenideElement iframe = $("#preview-notification-frame");
+    private ElementsCollection placeDropdownOption = $$("div.MuiBox-root");
     private String button = "//div[contains(@class, 'MuiPaper-root')]//button[span[.=\"%s\"]]";
+    private String dynamicPlaceTextBox = "//div[label[text()='%s']]//input";
     private SelenideElement calendarWrapper = $x("//div[contains(@class, 'rdrCalendarWrapper')]");
 }

@@ -7,9 +7,6 @@
     <parameter name="browser" value="chrome"/>
     <parameter name="environment" value="vietjet"/>
     <parameter name="language" value="en"/>
-    <listeners>
-        <listener class-name="com.sele3.testng.TestListener"/>
-    </listeners>
     <test name="VietJetTest">
         <classes>
             <class name="sele3.vietjet.VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully"/>

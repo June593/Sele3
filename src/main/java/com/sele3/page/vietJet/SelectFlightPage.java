@@ -1,8 +1,6 @@
 package com.sele3.page.vietJet;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import com.sele3.data.vietjet.Passenger;
 import com.sele3.data.vietjet.TicketData;
 import com.sele3.enums.vietjet.LabelType;
@@ -35,18 +33,16 @@ public class SelectFlightPage {
     }
 
     public boolean isSelectTravelOptionsPageDisplayed() {
-        SelenideElement flights = $$("div")
-                .findBy(Condition.text("VJ"));
-        return flights.isDisplayed();
+        return WebDriverRunner.url().endsWith("/select-flight");
     }
 
     public int getCheapestPrice() {
         return price.stream()
-                .map(el -> {
+                .mapToInt(el -> {
                     String full = el.scrollIntoView(true).getText();
-                    return full.replaceAll("[^\\d]", "");
+                    String numeric = full.replaceAll("[^\\d]", "");
+                    return Integer.parseInt(numeric);
                 })
-                .mapToInt(Integer::parseInt)
                 .min()
                 .orElseThrow(() -> new RuntimeException("No price found"));
     }
@@ -74,11 +70,10 @@ public class SelectFlightPage {
         scrollUntilAllPricesLoaded();
         int minPrice = getCheapestPrice();
         String formattedPrice = String.format("%,d", minPrice / 1000);
-        $$x(String.format("//p[contains(text(),'%s')]", formattedPrice)).get(0)
+        $$x(String.format("//p[contains(text(),'%s')]", formattedPrice)).first()
                 .scrollIntoView(false)
                 .shouldBe(Condition.visible)
                 .click();
-        clickContinueButton();
     }
 
     @Step("Click on Continue button")
@@ -87,11 +82,11 @@ public class SelectFlightPage {
     }
 
     public String getFromPlace() {
-        return $x(String.format(textByLabel, LabelType.FROM)).getText().split("\\(")[0].trim();
+        return $x(String.format(placeInTopBanner, LabelType.FROM)).getText().split("\\(")[0].trim();
     }
 
     public String getToPlace() {
-        return $x(String.format(textByLabel, LabelType.TO)).getText().split("\\(")[0].trim();
+        return $x(String.format(placeInTopBanner, LabelType.TO)).getText().split("\\(")[0].trim();
     }
 
     public Passenger getPassengerInfo() {
@@ -119,7 +114,7 @@ public class SelectFlightPage {
         return 0; // Default to 0 if not found
     }
 
-    public TicketData getTicketInfo(boolean isDepartureTicket) {
+    private TicketData getTicketInfo(boolean isDepartureTicket) {
         String formatter = (String) YamlUtils.getProperty("config.datetime_format");
         String locale = (String) YamlUtils.getProperty("config.locale");
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(formatter, new Locale(locale));
@@ -133,22 +128,11 @@ public class SelectFlightPage {
         // Extract all <h5> texts within the selected section
         List<String> h5Texts = section.texts();
 
-        // Filter out locations in the format: "City (XXX)"
-        List<String> places = h5Texts.stream()
-                .filter(t -> t.matches(".*\\([A-Z]{3}\\)"))
-                .toList();
-
-        String from = places.get(0);
-        String to = places.get(1);
-
-        // Find the string containing date and time info
-        String datetimeText = h5Texts.stream()
-                .filter(t -> t.contains("|") && t.contains(":"))
-                .findFirst()
-                .orElse("");
+        String from = h5Texts.get(0);
+        String to = h5Texts.get(1);
 
         // Extract the date part: "31/07/2025" from "Thu, 31/07/2025 | 05:00 - 07:10 | VJ1198 | Deluxe"
-        String datePart = datetimeText.split("\\|")[0].split(",")[1].trim();
+        String datePart = h5Texts.get(2).split("\\|")[0].split(",")[1].trim();
         LocalDate date = LocalDate.parse(datePart, dateFormatter);
 
         return TicketData.builder()
@@ -181,7 +165,7 @@ public class SelectFlightPage {
     /**
      * Close the promotional dialog if it is displayed
      */
-    public void closePromoDialogIfVisible() {
+    public void closeAdsDialogIfVisible() {
         SelenideElement dialog = $x("//div[@role='dialog']");
         if (dialog.is(Condition.visible, Constants.MEDIUM_TIMEOUT)) {
             SelenideElement closeButton = dialog.$("button[aria-label='close']");
@@ -190,8 +174,8 @@ public class SelectFlightPage {
     }
 
     private SelenideElement selectedDate = $x("//div[contains(@class, 'slick-current')]//p[2]");
-    private ElementsCollection price = $$x("//div[p[.='000 VND']]");
-    private String textByLabel = "//span[.='%s']/following-sibling::span";
+    private ElementsCollection price = $$x("//div[contains(@class, 'MuiGrid-root')]//div[p[contains(@class, 'MuiTypography-h4') and not(@variantlg)]]");
+    private String placeInTopBanner = "//span[.='%s']/following-sibling::span";
     private String passengerText = "//p[@variantmd='h3']//span[contains(.,'%s')]";
     private String button = "//button[contains(@class, 'MuiButtonBase-root') and span[.=\"%s\"]]";
 }

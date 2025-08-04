@@ -158,7 +158,8 @@ In command line, add this command
 
 ```mvn clean test -P testSuite```
 ```mvn clean test -P testContent```
-```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite.xml```
+```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_agoda.xml```
+```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_vj.xml```
 
 
 
