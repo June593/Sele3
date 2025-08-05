@@ -7,12 +7,14 @@ import com.codeborne.selenide.SelenideElement;
 import com.sele3.data.vietjet.Passenger;
 import com.sele3.data.vietjet.SearchTicketData;
 import com.sele3.enums.vietjet.LabelType;
+import com.sele3.utils.DateTimeUtils;
 import com.sele3.utils.YamlUtils;
 import io.qameta.allure.Step;
 import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -68,41 +70,28 @@ public class HomePage {
 
         calendarWrapper.shouldBe(Condition.visible);
 
-        while ($$(".rdrMonthName").stream().noneMatch(el -> el.getText().trim().equals(monthYear))) {
+        ElementsCollection visibleMonths = $$(".rdrMonthName");
+        String lastVisibleMonth = visibleMonths.get(visibleMonths.size() - 1).getText().trim();
+
+        int monthDiff = DateTimeUtils.getMonthDiff(lastVisibleMonth, monthYear, locale);
+        for (int i = 0; i < monthDiff; i++) {
             $(".rdrNextButton").click();
         }
-
-        SelenideElement targetMonth = $$(".rdrMonth").stream()
-                .filter(month -> month.$(".rdrMonthName").getText().equals(monthYear))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(YamlUtils.getProperty("error.monthNotFound") + ": " + monthYear));
-
-        targetMonth.$$(".rdrDay").stream()
-                .filter(el -> el.$(".rdrDayNumber > span").getText().equals(day))
-                .filter(el -> !el.getAttribute("class").contains("rdrDayDisabled"))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException(YamlUtils.getProperty("error.validDayNotFound") + ": " + day + " " + monthYear))
-                .click();
+        SelenideElement dateInCalender = $x(String.format("//div[@class='rdrMonth' and contains(.,'%s')]//span[@class='rdrDayNumber']/span[text()='%s']", monthYear, day));
+        dateInCalender.shouldBe(Condition.visible).click();
     }
+
 
     @Step("Search and select location: {labelType} - {location}")
     public void searchAndSelectLocation(LabelType labelType, String location) {
-        String from = (String) YamlUtils.getProperty("labelType.from");
-        SelenideElement inputField;
-        if (labelType.equals(LabelType.FROM)) {
-            inputField = $x(String.format(dynamicPlaceTextBox, from));
-            inputField.shouldBe(Condition.visible).click();
-            inputField.setValue(location);
-            SelenideElement dropdownOption = $$("div.MuiBox-root").findBy(Condition.text(location));
-            dropdownOption.shouldBe(Condition.visible).click();
-        } else if (labelType.equals(LabelType.TO)) {
-            inputField = $("#arrivalPlaceDesktop");
-            inputField.shouldBe(Condition.visible).setValue(location);
-            SelenideElement dropdownOption = $$("div.MuiBox-root").findBy(Condition.text(location));
-            dropdownOption.shouldBe(Condition.visible).click();
-        } else {
-            throw new IllegalArgumentException((String) YamlUtils.getProperty("error.invalidLocationType"));
-        }
+        String labelText = labelType.equals(LabelType.FROM) ?
+                (String) YamlUtils.getProperty("labelType.from") :
+                (String) YamlUtils.getProperty("labelType.to");
+        SelenideElement inputField = $x(String.format(dynamicPlaceTextBox, labelText));
+        inputField.shouldBe(Condition.visible).click();
+        inputField.setValue(location);
+        SelenideElement dropdownOption = $$("div.MuiBox-root").findBy(Condition.text(location));
+        dropdownOption.shouldBe(Condition.visible).click();
     }
 
     private void selectNumber(LabelType labelType, int targetNumber) {
@@ -139,7 +128,7 @@ public class HomePage {
     @Step("Click on Search button")
     public void clickSearchButton() {
         String buttonText = (String) YamlUtils.getProperty("button.letGo");
-        $x(String.format(button, buttonText)).shouldBe(Condition.visible).click();
+        $x(String.format(button, buttonText)).scrollIntoCenter().shouldBe(Condition.visible).click();
     }
 
     private SelenideElement acceptDialog = $x("//div[@role='dialog']//span/h5");

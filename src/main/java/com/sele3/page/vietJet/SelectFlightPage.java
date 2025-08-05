@@ -22,8 +22,6 @@ import static com.codeborne.selenide.Selenide.*;
 public class SelectFlightPage {
 
     public boolean allPricesHaveVND() {
-        ElementsCollection prices = $$("p.MuiTypography-body1");
-
         for (SelenideElement price : prices) {
             if (!price.getText().contains("VND")) {
                 return false;
@@ -40,7 +38,7 @@ public class SelectFlightPage {
         return price.stream()
                 .mapToInt(el -> {
                     String full = el.scrollIntoView(true).getText();
-                    String numeric = full.replaceAll("[^\\d]", "");
+                    String numeric = full.replaceAll("\\D", "");
                     return Integer.parseInt(numeric);
                 })
                 .min()
@@ -178,4 +176,5 @@ public class SelectFlightPage {
     private String placeInTopBanner = "//span[.='%s']/following-sibling::span";
     private String passengerText = "//p[@variantmd='h3']//span[contains(.,'%s')]";
     private String button = "//button[contains(@class, 'MuiButtonBase-root') and span[.=\"%s\"]]";
+    private ElementsCollection prices = $$("p.MuiTypography-body1");
 }

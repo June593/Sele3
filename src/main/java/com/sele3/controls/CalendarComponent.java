@@ -46,7 +46,7 @@ public class CalendarComponent {
     }
 
     private SelenideElement getDateElement(LocalDate date) {
-        return $x(String.format("//span[@data-selenium-date='%s']", date))
+        return calendarDates.findBy(Condition.attribute("data-selenium-date", date.toString()))
                 .shouldBe(Condition.visible)
                 .shouldBe(Condition.enabled);
     }
