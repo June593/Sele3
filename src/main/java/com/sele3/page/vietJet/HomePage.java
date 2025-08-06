@@ -7,14 +7,14 @@ import com.codeborne.selenide.SelenideElement;
 import com.sele3.data.vietjet.Passenger;
 import com.sele3.data.vietjet.SearchTicketData;
 import com.sele3.enums.vietjet.LabelType;
-import com.sele3.utils.DateTimeUtils;
 import com.sele3.utils.YamlUtils;
 import io.qameta.allure.Step;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -66,14 +66,14 @@ public class HomePage {
         Locale locale = new Locale(localeStr);
 
         String day = String.valueOf(localDate.getDayOfMonth());
-        String monthYear = localDate.format(DateTimeFormatter.ofPattern("MMMM yyyy", locale));
+        YearMonth monthYear = YearMonth.parse(localDate.format(DateTimeFormatter.ofPattern("MMMM yyyy", locale)));
 
         calendarWrapper.shouldBe(Condition.visible);
 
         ElementsCollection visibleMonths = $$(".rdrMonthName");
-        String lastVisibleMonth = visibleMonths.get(visibleMonths.size() - 1).getText().trim();
+        YearMonth lastVisibleMonth = YearMonth.parse(visibleMonths.get(visibleMonths.size() - 1).getText().trim());
 
-        int monthDiff = DateTimeUtils.getMonthDiff(lastVisibleMonth, monthYear, locale);
+        int monthDiff = (int) ChronoUnit.MONTHS.between(lastVisibleMonth, monthYear);
         for (int i = 0; i < monthDiff; i++) {
             $(".rdrNextButton").click();
         }
