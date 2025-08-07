@@ -22,7 +22,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
   - [x] Agoda - TC1
   - [x] Agoda - TC2
   - [x] Agoda - TC3
-  - [ ] Vietjet - TC1
+  - [x] Vietjet - TC1
   - [ ] Vietjet - TC2
 - [x] Jenkins CI pipeline with scheduled runs and email reports
 - 
@@ -32,7 +32,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 - [x] Group tests by purposes: regression, smoke/sanity test
 - [x] Source control practice: branch
 - [x] Switch test environment: dev, stg (dev: agoda.com, stg: vj.com)
-- [ ] Wrap custom controls
+- [x] Wrap custom controls
 - [ ] Data driven testing: test data is in Excel file
 - [ ] Working with Shadow DOM
 - [ ] Compare with another FW e.g. Playwright
@@ -158,7 +158,8 @@ In command line, add this command
 
 ```mvn clean test -P testSuite```
 ```mvn clean test -P testContent```
-```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite.xml```
+```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_agoda.xml```
+```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_vj.xml```
 
 
 

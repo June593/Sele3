@@ -47,7 +47,6 @@ public class SoftAssertion extends Assertion {
 
             Allure.step(DEFAULT_SOFT_ASSERT_MESSAGE + getErrorDetails(ex), Status.FAILED);
 
-            // Chụp screenshot với Selenide
             File screenshot = Screenshots.takeScreenShotAsFile();
             if (Objects.nonNull(screenshot)) {
                 try {

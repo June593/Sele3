@@ -1,9 +1,9 @@
 package com.sele3.page.agoda;
 
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.sele3.controls.CalendarComponent;
 import com.sele3.data.agoda.SearchHotelData;
 import com.sele3.utils.YamlUtils;
 import io.qameta.allure.Step;
@@ -56,20 +56,7 @@ public class HomePage {
 
     @Step("Select date: {date}")
     public void selectDate(LocalDate date) {
-        while (true) {
-            LocalDate minimumDate = LocalDate.parse(calendarDate.first().getAttribute("data-selenium-date"));
-            LocalDate maximumDate = LocalDate.parse(calendarDate.last().getAttribute("data-selenium-date"));
-
-            if (date.isBefore(minimumDate)) {
-                previousMonthButton.click();
-            } else if (date.isAfter(maximumDate)) {
-                nextMonthButton.click();
-            } else {
-                break;
-            }
-        }
-
-        getSelectDate(date).click();
+        calendar.selectDate(date);
     }
 
     @Step("Select number of rooms: {targetNumber}")
@@ -109,12 +96,6 @@ public class HomePage {
         getButton((String) YamlUtils.getProperty("button.search")).click();
     }
 
-    private SelenideElement getSelectDate(LocalDate date) {
-        return $x(String.format("//span[@data-selenium-date='%s']", date.toString()))
-                .shouldBe(Condition.visible)
-                .shouldBe(Condition.enabled);
-    }
-
     private SelenideElement getButton(String text) {
         return $x(String.format("//span[.='%s']", text))
                 .shouldBe(Condition.visible)
@@ -133,8 +114,7 @@ public class HomePage {
     private SelenideElement minusChildrenButton = $x("//button[@data-element-name='occupancy-selector-panel-children' and @data-selenium='minus']");
     private SelenideElement childrenValue = $x("//div[@data-component='desktop-occ-children-value']//p");
     private SelenideElement adsCloseButton = $x("//button[@data-element-name='prominent-app-download-floating-button']");
-    private ElementsCollection calendarDate = $$(By.cssSelector("[data-selenium-date]"));
-    private SelenideElement previousMonthButton = $x("//button[@aria-label='Previous Month']");
-    private SelenideElement nextMonthButton = $x("//button[@aria-label='Next Month']");
+    private final SelenideElement calendarRoot = $("#DatePicker__AccessibleV2");
+    private final CalendarComponent calendar = new CalendarComponent(calendarRoot);
 }
 
