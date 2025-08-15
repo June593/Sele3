@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="Sele3" parallel="false" thread-count="0">
+<suite name="AgodaTest" parallel="false" thread-count="0">
+    <listeners>
+        <listener class-name="com.sele3.testng.TestListener"/>
+    </listeners>
     <parameter name="retryType" value="immediate"/>
     <parameter name="maxRetry" value="0"/>
     <parameter name="browser" value="chrome"/>

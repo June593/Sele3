@@ -117,19 +117,19 @@
         <profile>
             <id>testSuite_agoda</id>
             <properties>
-                <suiteFile>src/test/resources/suites/testSuite_agoda.xml</suiteFile>
+                <suiteFile>src/test/resources/suites/agodaTestSuite.xml</suiteFile>
             </properties>
         </profile>
         <profile>
             <id>testSuite_vj</id>
             <properties>
-                <suiteFile>src/test/resources/suites/testSuite_vj.xml</suiteFile>
+                <suiteFile>src/test/resources/suites/vjTestSuite.xml</suiteFile>
             </properties>
         </profile>
         <profile>
             <id>testContent</id>
             <properties>
-                <suiteFile>src/test/resources/suites/testContentSuite.xml</suiteFile>
+                <suiteFile>src/test/resources/suites/leapFrogContentTestSuite.xml</suiteFile>
             </properties>
         </profile>
 

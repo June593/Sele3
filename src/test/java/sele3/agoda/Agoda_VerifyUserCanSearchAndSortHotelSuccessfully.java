@@ -36,7 +36,7 @@ public class Agoda_VerifyUserCanSearchAndSortHotelSuccessfully extends TestBase 
                 .build();
     }
 
-    @Test(groups = "agoda", description = "TC01 - Agoda - Search and sort hotel successfully")
+    @Test(groups = {"smoke", "regression"}, description = "TC01 - Agoda - Search and sort hotel successfully")
     public void agoda_VerifyUserCanSearchAndSortHotelSuccessfully() {
         generalPage.openPage();
         homePage.closeAds();
