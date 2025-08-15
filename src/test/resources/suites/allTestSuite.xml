@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests" parallel="false" thread-count="0">
+
+    <!-- Listeners áp dụng cho toàn bộ suite -->
+    <listeners>
+        <listener class-name="com.sele3.testng.TestListener"/>
+    </listeners>
+
+    <!-- Agoda Test -->
+    <test name="AgodaTest">
+        <parameter name="retryType" value="immediate"/>
+        <parameter name="maxRetry" value="0"/>
+        <parameter name="browser" value="chrome"/>
+        <parameter name="environment" value="agoda"/>
+        <parameter name="language" value="en"/>
+        <classes>
+            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndSortHotelSuccessfully"/>
+<!--            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully"/>-->
+<!--            <class name="sele3.agoda.Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfully"/>-->
+        </classes>
+    </test>
+
+<!--    &lt;!&ndash; LeapFrog Content Test &ndash;&gt;-->
+<!--    <test name="LeapFrogContentTest">-->
+<!--        <classes>-->
+<!--            <class name="sele3.leapFrog.LeapFrogContentTest"/>-->
+<!--        </classes>-->
+<!--    </test>-->
+
+    <!-- VietJet Test -->
+    <test name="VietJetTest">
+        <parameter name="retryType" value="immediate"/>
+        <parameter name="maxRetry" value="0"/>
+        <parameter name="browser" value="chrome"/>
+        <parameter name="environment" value="vietjet"/>
+        <classes>
+            <class name="sele3.vietjet.VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully">
+                <parameter name="language" value="en"/>
+            </class>
+<!--            <class name="sele3.vietjet.Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months">-->
+<!--                <parameter name="language" value="vi"/>-->
+<!--            </class>-->
+        </classes>
+    </test>
+
+</suite>

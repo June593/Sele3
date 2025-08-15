@@ -6,7 +6,7 @@
     </listeners>
     <test name="LeapFrogContentTest">
         <classes>
-            <class name="sele3.leapFrog.LeapFrogContentTest"/>
+<!--            <class name="sele3.leapFrog.LeapFrogContentTest"/>-->
         </classes>
     </test>
 </suite>

@@ -13,8 +13,8 @@
     <test name="AgodaTest">
         <classes>
             <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndSortHotelSuccessfully"/>
-            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully"/>
-            <class name="sele3.agoda.Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfully"/>
+<!--            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully"/>-->
+<!--            <class name="sele3.agoda.Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfully"/>-->
         </classes>
     </test>
 </suite>

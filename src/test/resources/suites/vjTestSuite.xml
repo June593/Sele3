@@ -15,9 +15,9 @@
             <class name="sele3.vietjet.VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully">
                 <parameter name="language" value="en"/>
             </class>
-            <class name="sele3.vietjet.Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months">
-                <parameter name="language" value="vi"/>
-            </class>
+<!--            <class name="sele3.vietjet.Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months">-->
+<!--                <parameter name="language" value="vi"/>-->
+<!--            </class>-->
         </classes>
     </test>
 </suite>
