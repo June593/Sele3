@@ -36,7 +36,7 @@ public class VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully extends Te
                 .build();
     }
 
-    @Test(description = "TC01 - VietJet - Search and choose tickets on a specific day successfully")
+    @Test(groups = {"smoke", "regression"}, description = "TC01 - VietJet - Search and choose tickets on a specific day successfully")
     public void VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully() {
         generalPage.openPage();
         homePage.acceptCookie();

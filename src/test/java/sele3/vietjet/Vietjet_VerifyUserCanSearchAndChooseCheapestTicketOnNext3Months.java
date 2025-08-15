@@ -40,7 +40,7 @@ public class Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months ext
         language = (String) YamlUtils.getProperty("config.displaying_language");
     }
 
-    @Test(description = "TC05 - Vietjet - Search and choose cheapest tickets on next 3 months successfully")
+    @Test(groups = {"smoke", "regression"}, description = "TC02 - Vietjet - Search and choose cheapest tickets on next 3 months successfully")
     public void vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months() {
         generalPage.openPage();
         homePage.acceptCookie();
@@ -69,7 +69,6 @@ public class Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months ext
         selectFlightPage.selectTheFirstCheapestTicket();
         departureInfo = selectFlightPage.getDepartureTicketInfo();
         selectFlightPage.clickContinueButton();
-        departureInfo = selectFlightPage.getDepartureTicketInfo();
 
         selectFlightPage.selectTheFirstCheapestTicket();
         returnInfo = selectFlightPage.getReturnTicketInfo();
