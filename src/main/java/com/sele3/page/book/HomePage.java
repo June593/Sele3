@@ -2,6 +2,7 @@ package com.sele3.page.book;
 
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+import com.sele3.enums.book.WorkingShadowDomMethod;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -13,17 +14,15 @@ import static com.codeborne.selenide.Selenide.$;
 public class HomePage {
 
     @Step("Enter keyword into search text box using {method}: {keyword}")
-    public void search(String method, String keyword) {
-        if ("selenide".equalsIgnoreCase(method)) {
+    public void search(WorkingShadowDomMethod method, String keyword) {
+        if (method.equals(WorkingShadowDomMethod.SELENIDE)) {
             SelenideElement searchBox = getSearchBoxSelenide();
             searchBox.click();
             searchBox.setValue(keyword).pressEnter();
-        } else if ("selenium".equalsIgnoreCase(method)) {
+        } else {
             WebElement searchBox = getSearchBoxSelenium();
             searchBox.click();
             searchBox.sendKeys(keyword, Keys.ENTER);
-        } else {
-            throw new IllegalArgumentException("Unsupported search method: " + method);
         }
     }
 

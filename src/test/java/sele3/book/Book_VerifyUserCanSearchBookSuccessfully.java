@@ -1,5 +1,6 @@
 package sele3.book;
 
+import com.sele3.enums.book.WorkingShadowDomMethod;
 import com.sele3.page.book.HomePage;
 import com.sele3.page.book.SearchResultPage;
 import com.sele3.utils.Assertion;
@@ -14,16 +15,16 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class Book_VerifyUserCanSearchBookSuccessfully extends TestBase {
 
-    @DataProvider(name = "searchMethods")
-    public Object[][] searchMethods() {
+    @DataProvider(name = "workingShowdownDomMethod")
+    public Object[][] getWorkingShowdownDomMethod() {
         return new Object[][]{
-                {"selenide"},
-                {"selenium"}
+                {WorkingShadowDomMethod.SELENIDE},
+                {WorkingShadowDomMethod.SELENIUM},
         };
     }
 
-    @Test(dataProvider = "searchMethods", description = "Verify user can search book successfully using different methods")
-    public void verifyUserCanSearchBookSuccessfully(String method) {
+    @Test(dataProvider = "workingShowdownDomMethod", description = "Verify user can search book successfully using different methods")
+    public void verifyUserCanSearchBookSuccessfully(WorkingShadowDomMethod method) {
         open(Constants.BOOK_BASE_URL);
         homePage.search(method, KEY_SEARCH);
         List<String> bookTitles = searchResultPage.getAllBookTitles(method);

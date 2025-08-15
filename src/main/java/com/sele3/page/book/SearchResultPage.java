@@ -3,6 +3,7 @@ package com.sele3.page.book;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+import com.sele3.enums.book.WorkingShadowDomMethod;
 import com.sele3.utils.Constants;
 import io.qameta.allure.Allure;
 import org.openqa.selenium.By;
@@ -20,14 +21,13 @@ public class SearchResultPage {
     /**
      * Get all book titles (choose method: "selenide" or "selenium").
      */
-    public List<String> getAllBookTitles(String method) {
-        if ("selenium".equalsIgnoreCase(method)) {
-            return getTitlesBySelenium();
+    public List<String> getAllBookTitles(WorkingShadowDomMethod method) {
+        if (method.equals(WorkingShadowDomMethod.SELENIDE)) {
+            return getTitlesBySelenide();
         }
-        return getTitlesBySelenide();
+        return getTitlesBySelenium();
     }
 
-    // --- Private core methods ---
     private List<String> getTitlesBySelenide() {
         return $$(shadowDeepCss(BOOK_TITLE_SELECTOR))
                 .should(CollectionCondition.allMatch("All titles should be non-empty",
