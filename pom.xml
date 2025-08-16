@@ -12,7 +12,9 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <suiteFile>src/test/resources/suites/testSuite.xml</suiteFile>
+        <suites.dir>src/test/resources/suites</suites.dir>
+        <!-- Default suite file -->
+        <suiteFile>${suites.dir}/allTestSuites.xml</suiteFile>
     </properties>
 
     <dependencies>
@@ -115,21 +117,27 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>testSuite_agoda</id>
+            <id>agoda</id>
             <properties>
-                <suiteFile>src/test/resources/suites/agodaTestSuite.xml</suiteFile>
+                <suiteFile>${suites.dir}/agodaTestSuite.xml</suiteFile>
             </properties>
         </profile>
         <profile>
-            <id>testSuite_vj</id>
+            <id>vietJet</id>
             <properties>
-                <suiteFile>src/test/resources/suites/vjTestSuite.xml</suiteFile>
+                <suiteFile>${suites.dir}/vjTestSuite.xml</suiteFile>
             </properties>
         </profile>
         <profile>
-            <id>testContent</id>
+            <id>leapFrog</id>
             <properties>
-                <suiteFile>src/test/resources/suites/leapFrogContentTestSuite.xml</suiteFile>
+                <suiteFile>${suites.dir}/leapFrogContentTestSuite.xml</suiteFile>
+            </properties>
+        </profile>
+        <profile>
+            <id>book</id>
+            <properties>
+                <suiteFile>${suites.dir}/bookTestSuite.xml</suiteFile>
             </properties>
         </profile>
 

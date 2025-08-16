@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="AllTests" parallel="false" thread-count="0">
+
+    <parameter name="browser" value="chrome"/>
+    <parameter name="retryType" value="immediate"/>
+    <parameter name="maxRetry" value="0"/>
+    <parameter name="language" value="en"/>
+
+    <listeners>
+        <listener class-name="com.sele3.testng.TestListener"/>
+    </listeners>
+
+    <test name="AgodaTest">
+        <parameter name="environment" value="agoda"/>
+        <classes>
+            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndSortHotelSuccessfully"/>
+            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully"/>
+            <class name="sele3.agoda.Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfully"/>
+        </classes>
+    </test>
+    <test name="VietJetTest">
+        <parameter name="environment" value="vietjet"/>
+        <classes>
+            <class name="sele3.vietjet.VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully">
+                <parameter name="language" value="en"/>
+            </class>
+            <class name="sele3.vietjet.Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months">
+                <parameter name="language" value="vi"/>
+            </class>
+        </classes>
+    </test>
+    <test name="LeapFrogContentTest">
+        <classes>
+            <class name="sele3.leapFrog.LeapFrogContentTest"/>
+        </classes>
+    </test>
+    <test name="BookTest">
+        <classes>
+            <class name="sele3.book.Book_VerifyUserCanSearchBookSuccessfully"/>
+        </classes>
+    </test>
+</suite>

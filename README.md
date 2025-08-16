@@ -34,7 +34,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 - [x] Switch test environment: dev, stg (dev: agoda.com, stg: vj.com)
 - [x] Wrap custom controls
 - [ ] Data driven testing: test data is in Excel file
-- [ ] Working with Shadow DOM
+- [x] Working with Shadow DOM
 - [ ] Compare with another FW e.g. Playwright
 
 ---
@@ -43,22 +43,23 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 
 ```bash
 .
-├── pom.xml
-├── Jenkinsfile
-├── README.md
+├── pom.xml                          # Maven project configuration (dependencies, plugins, build settings)
+├── Jenkinsfile                      # Jenkins pipeline definition for CI/CD
+├── README.md                        # Project documentation and usage guide
 ├── src
 │   ├── main/java
-│   │   ├── data  
-│   │   ├── common          # Shared constants
-│   │   ├── testng          # TestListener
-│   │   ├── page            # Page Object Models
-│   │   └── utils           # Utility methods
-│   └── test/java/sele3     # Testcases
+│   │   ├── controls                 # Custom UI controls (e.g. Calendar wrapper)
+│   │   ├── data                     # Data models
+│   │   ├── enums                    # Enum definitions
+│   │   ├── page                     # Page Object Models (encapsulation of page structure and actions)
+│   │   ├── testng                   # TestNG listeners (e.g. TestListener, RetryAnalyzer)
+│   │   └── utils                    # Utility classes (common helpers, configuration readers...)
+│   └── test/java/sele3              # Test classes (organized test cases using Page Objects + TestNG)
 │   └── test/resources
-│       ├── languages       #  languages yaml file
-│       ├── profiles        #  properties files
-│       ├── suites          # TestNG XML files
-│       └── selenide.properties #selenide config
+│       ├── languages                # Multi-language support (YAML translation/configuration files)
+│       ├── profiles                 # Environment-specific property files (e.g. dev, staging, prod)
+│       ├── suites                   # TestNG suite definitions (XML files grouping test cases)
+│       └── selenide.properties      # Selenide configuration file (browser, timeout, screenshots, etc.)
 ```
 ## Pre-requites
 
@@ -110,8 +111,6 @@ mvn clean test \
 | `-DretryStrategy`             | Retry strategy to apply (`immediate` or `post-suite`).                       |
 
 
-
-
 If you want to run the case in Specify .xml file, give a reference at your .xml file path
 
 In the Maven Apache Plugin to the POM.xml
@@ -156,10 +155,14 @@ Example: `src/test/resources/suites/defaultSuite.xml`
 ```
 In command line, add this command
 
-```mvn clean test -P testSuite```
-```mvn clean test -P testContent```
-```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_agoda.xml```
-```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_vj.xml```
+```mvn clean test -P agoda```
+```mvn clean test -P vietJet```
+```mvn clean test -P leadFrog```
+```mvn clean test -P book```
+```mvn clean test -DsuiteFile=src/test/resources/suites/agodaTestSuite.xml```
+```mvn clean test -DsuiteFile=src/test/resources/suites/vjTestSuite.xml```
+```mvn clean test -DsuiteFile=src/test/resources/suites/leapFrogContentTestSuite.xml```
+```mvn clean test -DsuiteFile=src/test/resources/suites/bookTestSuite.xml```
 
 
 

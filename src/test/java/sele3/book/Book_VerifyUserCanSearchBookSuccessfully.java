@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class Book_VerifyUserCanSearchBookSuccessfully extends TestBase {
+public class Book_VerifyUserCanSearchBookSuccessfully {
 
     @DataProvider(name = "workingShowdownDomMethod")
     public Object[][] getWorkingShowdownDomMethod() {
