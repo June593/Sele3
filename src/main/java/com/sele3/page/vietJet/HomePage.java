@@ -24,10 +24,20 @@ import static com.codeborne.selenide.Selenide.*;
 @Data
 public class HomePage {
 
+    @Step("Accept cookie consent dialog")
     public void acceptCookie() {
         acceptDialog.shouldBe(Condition.visible).click();
     }
 
+    @Step("Close notification modal")
+    public void closeNotificationModal() {
+        notificationFrame.shouldBe(Condition.visible);
+        switchTo().frame(notificationFrame);
+        lateButton.shouldBe(Condition.visible).click();
+        switchTo().defaultContent();
+    }
+
+    @Step("Fill in search ticket info: {searchTicketData}")
     public void fillSearchTicketInfo(SearchTicketData searchTicketData) {
         if (Objects.nonNull(searchTicketData.getFrom())) {
             searchAndSelectLocation(LabelType.FROM, searchTicketData.getFrom());
@@ -53,34 +63,50 @@ public class HomePage {
                 selectNumberOfInfants(passenger.getInfantNumber());
             }
         }
+        if (searchTicketData.isFindLowestFare()) {
+            selectFindLowFare();
+        }
     }
 
+    @Step("Check 'Find low fare' checkbox")
+    public void selectFindLowFare() {
+        if (!findLowestFareCheckbox.isSelected()) {
+            findLowestFareCheckbox.click();
+        }
+    }
+
+    @Step("Search ticket with info: {searchTicketData}")
     public void searchTicket(SearchTicketData searchTicketData) {
         fillSearchTicketInfo(searchTicketData);
         clickSearchButton();
     }
 
-    @Step("Select date: {0}")
+    @Step("Select date: {localDate}")
     public void selectDate(LocalDate localDate) {
         String localeStr = (String) YamlUtils.getProperty("config.locale");
-        Locale locale = new Locale(localeStr);
+        String monthYearFormat = (String) YamlUtils.getProperty("config.month_year_format");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(monthYearFormat, new Locale(localeStr));
 
         String day = String.valueOf(localDate.getDayOfMonth());
-        YearMonth monthYear = YearMonth.parse(localDate.format(DateTimeFormatter.ofPattern("MMMM yyyy", locale)));
+        YearMonth targetMonthYear = YearMonth.from(localDate);
+        String monthYear = localDate.format(formatter);
 
         calendarWrapper.shouldBe(Condition.visible);
 
         ElementsCollection visibleMonths = $$(".rdrMonthName");
-        YearMonth lastVisibleMonth = YearMonth.parse(visibleMonths.get(visibleMonths.size() - 1).getText().trim());
+        String lastMonthText = visibleMonths.last().getOwnText().trim();
+        YearMonth lastVisibleMonth = YearMonth.parse(lastMonthText, formatter);
 
-        int monthDiff = (int) ChronoUnit.MONTHS.between(lastVisibleMonth, monthYear);
+        int monthDiff = (int) ChronoUnit.MONTHS.between(lastVisibleMonth, targetMonthYear);
         for (int i = 0; i < monthDiff; i++) {
             $(".rdrNextButton").click();
         }
-        SelenideElement dateInCalender = $x(String.format("//div[@class='rdrMonth' and contains(.,'%s')]//span[@class='rdrDayNumber']/span[text()='%s']", monthYear, day));
+        SelenideElement dateInCalender = $x(String.format(
+                "//div[@class='rdrMonth' and contains(., '%s')]//span[@class='rdrDayNumber']/span[text()='%s']",
+                monthYear, day
+        ));
         dateInCalender.shouldBe(Condition.visible).click();
     }
-
 
     @Step("Search and select location: {labelType} - {location}")
     public void searchAndSelectLocation(LabelType labelType, String location) {
@@ -90,10 +116,10 @@ public class HomePage {
         SelenideElement inputField = $x(String.format(dynamicPlaceTextBox, labelText));
         inputField.shouldBe(Condition.visible).click();
         inputField.setValue(location);
-        SelenideElement dropdownOption = $$("div.MuiBox-root").findBy(Condition.text(location));
-        dropdownOption.shouldBe(Condition.visible).click();
+        firstPlaceResult.shouldBe(Condition.visible).click();
     }
 
+    @Step("Select number of {labelType}: {targetNumber}")
     private void selectNumber(LabelType labelType, int targetNumber) {
         SelenideElement section = $x(String.format("//div[div/p[contains(.,'%s')]]/following-sibling::div", labelType.toString()));
         SelenideElement minusBtn = section.$x(".//button[1]");
@@ -113,14 +139,17 @@ public class HomePage {
         }
     }
 
+    @Step("Select number of adults: {numberOfAdults}")
     public void selectNumberOfAdults(Integer numberOfAdults) {
         selectNumber(LabelType.ADULT, numberOfAdults);
     }
 
+    @Step("Select number of children: {numberOfChildren}")
     public void selectNumberOfChildren(Integer numberOfChildren) {
         selectNumber(LabelType.CHILDREN, numberOfChildren);
     }
 
+    @Step("Select number of infants: {numberOfInfants}")
     public void selectNumberOfInfants(Integer numberOfInfants) {
         selectNumber(LabelType.INFANT, numberOfInfants);
     }
@@ -131,11 +160,20 @@ public class HomePage {
         $x(String.format(button, buttonText)).scrollIntoCenter().shouldBe(Condition.visible).click();
     }
 
+    @Step("Get language currently displayed")
+    public String getLanguageDisplaying() {
+        return languageButton.getText();
+    }
+
+    // Elements
     private SelenideElement acceptDialog = $x("//div[@role='dialog']//span/h5");
     private SelenideElement lateButton = $("#NC_CTA_TWO");
-    private SelenideElement iframe = $("#preview-notification-frame");
+    private SelenideElement notificationFrame = $("#preview-notification-frame");
     private ElementsCollection placeDropdownOption = $$("div.MuiBox-root");
     private String button = "//div[contains(@class, 'MuiPaper-root')]//button[span[.=\"%s\"]]";
     private String dynamicPlaceTextBox = "//div[label[text()='%s']]//input";
     private SelenideElement calendarWrapper = $x("//div[contains(@class, 'rdrCalendarWrapper')]");
+    private SelenideElement languageButton = $x("//button[contains(@class, 'MuiButton-text')]//div");
+    private SelenideElement findLowestFareCheckbox = $x("//div[contains(@class, 'MuiPaper-root')]//input[@type='checkbox']");
+    private SelenideElement firstPlaceResult = $x("(//div[contains(@class, 'MuiExpansionPanelDetails-root')]//div[contains(@class, 'MuiBox-root')])[1]");
 }

@@ -85,10 +85,5 @@ public class TestListener implements ITestListener, IAnnotationTransformer, Step
     public void onTestSkipped(ITestResult result) {
     }
 
-    @Override
-    public void beforeStepStart(StepResult result) {
-        logger.info("[Step]: {} -> is running", result.getName());
-    }
-
     private static final Logger logger = LoggerFactory.getLogger(TestListener.class);
 }

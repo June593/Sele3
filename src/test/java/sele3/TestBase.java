@@ -18,7 +18,10 @@ public class TestBase {
     @Parameters({"environment", "language"})
     public void beforeClass(String env, @Optional String language) {
         InputParameters.ENV = System.getProperty("environment", Objects.requireNonNullElse(env, "agoda"));
-        InputParameters.LANGUAGE = System.getProperty("language", Objects.requireNonNullElse(language, "vi"));
+        String defaultLang = Objects.requireNonNullElse(language, "vi");
+        InputParameters.LANGUAGE = this.getClass().getSimpleName().contains("CheapestTicketOnNext3Months")
+                ? "vi"
+                : System.getProperty("language", defaultLang);
 
         String yamlPath = InputParameters.LANGUAGE.equals("vi") ? Constants.VI_LANGUAGE_YAML_FILE_PATH : Constants.EN_LANGUAGE_YAML_FILE_PATH;
         YamlUtils.loadYaml(yamlPath);

@@ -19,7 +19,6 @@ public class CalendarComponent {
         this.calendarDates = rootElement.$$("[data-selenium-date]");
     }
 
-    @Step("Select date: {date}")
     public void selectDate(LocalDate date) {
         while (true) {
             LocalDate minDate = getMinimumDateVisible();
