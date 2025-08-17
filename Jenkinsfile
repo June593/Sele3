@@ -3,15 +3,15 @@ pipeline {
 
     parameters {
         choice(
-            name: 'TEST_SUITE',
+            name: 'GROUP',
             choices: [
-                '.\\src\\test\\resources\\suites\\allTestSuites.xml',
-                '.\\src\\test\\resources\\suites\\agodaTestSuite.xml',
-                '.\\src\\test\\resources\\suites\\vjTestSuite.xml',
-                '.\\src\\test\\resources\\suites\\bookTestSuite.xml',
-                '.\\src\\test\\resources\\suites\\leapFrogContentTestSuite.xml'
+                'all',
+                'agoda',
+                'vietjet',
+                'book',
+                'leapfrog'
             ],
-            description: 'Select the test suite'
+            description: 'Select the group'
         )
 
         choice(
@@ -43,30 +43,28 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/June593/Sele3.git', branch: 'Implement-VJ-02'
+                git url: 'https://github.com/June593/Sele3.git', branch: 'main'
             }
         }
 
         stage('Build and Test with Maven') {
             steps {
                 script {
-                    def testSuite = isUnix()
-                        ? params.TEST_SUITE.replace("\\", "/")
-                        : params.TEST_SUITE
+                    def groupOption = (params.GROUP == 'all') ? "" : "-Dgroups=${params.GROUP}"
 
-                    if (isUnix()) {
-                        sh '''
-                            rm -rf allure-results
-                            rm -rf target/surefire-reports
-                        '''
-                        sh """
-                            mvn clean test \
-                            -DsuiteXmlFile=${testSuite} \
-                            -Dbrowser=${params.BROWSER} \
-                            -Dlanguage=${params.LANGUAGE} \
-                            -DretryType=${params.RETRY_TYPE} \
-                            -DmaxRetry=${params.RETRY_MAX}
-                        """
+                if (isUnix()) {
+                    sh '''
+                        rm -rf allure-results
+                        rm -rf target/surefire-reports
+                    '''
+                    sh """
+                        mvn clean test \
+                        ${groupOption} \
+                        -Dbrowser=${params.BROWSER} \
+                        -Dlanguage=${params.LANGUAGE} \
+                        -DretryType=${params.RETRY_TYPE} \
+                        -DmaxRetry=${params.RETRY_MAX}
+                    """
                     } else {
                         bat '''
                             if exist allure-results rmdir /s /q allure-results
@@ -186,7 +184,7 @@ pipeline {
             mimeType: 'text/html',
             attachLog: false,
             attachmentsPattern: 'allure-report/index.html',
-            to: 'june5.gaming2@gmail.com, thuong.dang@agest.vn'
+            to: 'june5.gaming2@gmail.com'
             )
             }
         }
