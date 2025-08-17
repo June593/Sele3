@@ -1,7 +1,7 @@
 button:
   close: "Đóng"
   search: "TÌM"
-  letgo: "Tìm chuyến bay"
+  letGo: "Tìm chuyến bay"
   continue: "Đi tiếp"
 filter_types:
   popular_filter: "Bộ lọc phổ biến"
@@ -29,6 +29,7 @@ config:
   datetime_format: "dd/MM/yyyy"
   day_month_format: "d 'tháng' M"
   month_year_format: "'tháng' MM yyyy"
+  displaying_language: "Tiếng Việt"
 labelType:
   from: "Điểm khởi hành"
   to: "Điểm đến"

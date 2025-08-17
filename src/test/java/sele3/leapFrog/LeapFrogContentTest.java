@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class LeapFrogContentTest {
 
-    @Test
+    @Test(groups = {"leapfrog", "smoke", "regression"}, description =  "Verify the data from excel file with information on UI")
     public void compareGamesWithExcel() {
         open(String.format(LeapFrogPage.BASE_URL, 1));
         totalPages = leapFrogPage.getTotalPages();

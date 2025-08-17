@@ -12,7 +12,9 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <suiteFile>src/test/resources/suites/testSuite.xml</suiteFile>
+        <suites.dir>src/test/resources/suites</suites.dir>
+        <!-- Default suite file -->
+        <suiteFile>${suites.dir}/allTestSuites.xml</suiteFile>
     </properties>
 
     <dependencies>
@@ -107,23 +109,12 @@
             <version>26.0.2</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.13.0</version>
+        </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <id>testSuite</id>
-            <properties>
-                <suiteFile>src/test/resources/suites/testSuite.xml</suiteFile>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>testContent</id>
-            <properties>
-                <suiteFile>src/test/resources/suites/testLeapFrogContent.xml</suiteFile>
-            </properties>
-        </profile>
-    </profiles>
-
     <build>
         <plugins>
             <plugin>

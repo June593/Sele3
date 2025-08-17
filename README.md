@@ -23,7 +23,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
   - [x] Agoda - TC2
   - [x] Agoda - TC3
   - [x] Vietjet - TC1
-  - [ ] Vietjet - TC2
+  - [x] Vietjet - TC2
 - [x] Jenkins CI pipeline with scheduled runs and email reports
 - 
 ### User Cases
@@ -34,7 +34,7 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 - [x] Switch test environment: dev, stg (dev: agoda.com, stg: vj.com)
 - [x] Wrap custom controls
 - [ ] Data driven testing: test data is in Excel file
-- [ ] Working with Shadow DOM
+- [x] Working with Shadow DOM
 - [ ] Compare with another FW e.g. Playwright
 
 ---
@@ -43,22 +43,23 @@ A robust UI automation framework built using **Selenide & Selenium**, with suppo
 
 ```bash
 .
-├── pom.xml
-├── Jenkinsfile
-├── README.md
+├── pom.xml                          # Maven project configuration (dependencies, plugins, build settings)
+├── Jenkinsfile                      # Jenkins pipeline definition for CI/CD
+├── README.md                        # Project documentation and usage guide
 ├── src
 │   ├── main/java
-│   │   ├── data  
-│   │   ├── common          # Shared constants
-│   │   ├── testng          # TestListener
-│   │   ├── page            # Page Object Models
-│   │   └── utils           # Utility methods
-│   └── test/java/sele3     # Testcases
+│   │   ├── controls                 # Custom UI controls (e.g. Calendar wrapper)
+│   │   ├── data                     # Data models
+│   │   ├── enums                    # Enum definitions
+│   │   ├── page                     # Page Object Models (encapsulation of page structure and actions)
+│   │   ├── testng                   # TestNG listeners (e.g. TestListener, RetryAnalyzer)
+│   │   └── utils                    # Utility classes (common helpers, configuration readers...)
+│   └── test/java/sele3              # Test classes (organized test cases using Page Objects + TestNG)
 │   └── test/resources
-│       ├── languages       #  languages yaml file
-│       ├── profiles        #  properties files
-│       ├── suites          # TestNG XML files
-│       └── selenide.properties #selenide config
+│       ├── languages                # Multi-language support (YAML translation/configuration files)
+│       ├── profiles                 # Environment-specific property files (e.g. dev, staging, prod)
+│       ├── suites                   # TestNG suite definitions (XML files grouping test cases)
+│       └── selenide.properties      # Selenide configuration file (browser, timeout, screenshots, etc.)
 ```
 ## Pre-requites
 
@@ -110,58 +111,12 @@ mvn clean test \
 | `-DretryStrategy`             | Retry strategy to apply (`immediate` or `post-suite`).                       |
 
 
-
-
-If you want to run the case in Specify .xml file, give a reference at your .xml file path
-
-In the Maven Apache Plugin to the POM.xml
-
-```
-<build>
-<plugins>
-    [...]
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
-        <configuration>
-          <suiteXmlFiles>
-            <suiteXmlFile>testng.xml</suiteXmlFile>
-          </suiteXmlFiles>
-        </configuration>
-      </plugin>
-    [...]
-</plugins>
-</build>
-```
-
-Provide the Location of testNG.xml file
-Example: `src/test/resources/suites/defaultSuite.xml`
-```
- <profiles>
-        <profile>
-            <id>testSuite</id>
-            <properties>
-                <suiteFile>src/test/resources/suites/testSuite.xml</suiteFile>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>testContent</id>
-            <properties>
-                <suiteFile>src/test/resources/suites/testContentSuite.xml</suiteFile>
-            </properties>
-        </profile>
-    </profiles>
-```
+If you want to run the cases based on groups such as env, smoke, or regression …
 In command line, add this command
 
-```mvn clean test -P testSuite```
-```mvn clean test -P testContent```
-```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_agoda.xml```
-```mvn clean test -DsuiteFile=src/test/resources/suites/testSuite_vj.xml```
-
-
+```mvn clean test -Dgroups=agoda```
+```mvn clean test -Dgroups=smoke```
+```mvn clean test -Dgroups=regression```
 
 ### Distributed testing
 

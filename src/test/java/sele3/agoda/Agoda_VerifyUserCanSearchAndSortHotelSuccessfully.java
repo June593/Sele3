@@ -19,7 +19,8 @@ import java.util.List;
 
 @Slf4j
 public class Agoda_VerifyUserCanSearchAndSortHotelSuccessfully extends TestBase {
-    @BeforeMethod
+
+    @BeforeMethod(alwaysRun = true)
     public void setUp() {
         destination = "Da Nang";
         nextFriday = LocalDate.now().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
@@ -36,7 +37,7 @@ public class Agoda_VerifyUserCanSearchAndSortHotelSuccessfully extends TestBase 
                 .build();
     }
 
-    @Test(groups = "agoda", description = "TC01 - Agoda - Search and sort hotel successfully")
+    @Test(groups = {"agoda", "smoke", "regression"}, description = "TC01 - Agoda - Search and sort hotel successfully")
     public void agoda_VerifyUserCanSearchAndSortHotelSuccessfully() {
         generalPage.openPage();
         homePage.closeAds();

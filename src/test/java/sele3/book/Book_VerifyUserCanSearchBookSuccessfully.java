@@ -13,7 +13,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Selenide.open;
 
-public class Book_VerifyUserCanSearchBookSuccessfully extends TestBase {
+public class Book_VerifyUserCanSearchBookSuccessfully {
 
     @DataProvider(name = "workingShowdownDomMethod")
     public Object[][] getWorkingShowdownDomMethod() {
@@ -23,7 +23,7 @@ public class Book_VerifyUserCanSearchBookSuccessfully extends TestBase {
         };
     }
 
-    @Test(dataProvider = "workingShowdownDomMethod", description = "Verify user can search book successfully using different methods")
+    @Test(groups = {"book", "smoke", "regression"}, dataProvider = "workingShowdownDomMethod", description = "Verify user can search book successfully using different methods")
     public void verifyUserCanSearchBookSuccessfully(WorkingShadowDomMethod method) {
         open(Constants.BOOK_BASE_URL);
         homePage.search(method, KEY_SEARCH);
