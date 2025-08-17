@@ -23,7 +23,7 @@ public class Book_VerifyUserCanSearchBookSuccessfully {
         };
     }
 
-    @Test(dataProvider = "workingShowdownDomMethod", description = "Verify user can search book successfully using different methods")
+    @Test(groups = {"book", "smoke", "regression"}, dataProvider = "workingShowdownDomMethod", description = "Verify user can search book successfully using different methods")
     public void verifyUserCanSearchBookSuccessfully(WorkingShadowDomMethod method) {
         open(Constants.BOOK_BASE_URL);
         homePage.search(method, KEY_SEARCH);

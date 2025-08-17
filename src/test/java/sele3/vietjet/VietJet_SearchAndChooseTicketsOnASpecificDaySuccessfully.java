@@ -18,6 +18,7 @@ import java.time.MonthDay;
 
 @Slf4j
 public class VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully extends TestBase {
+
     @BeforeMethod(alwaysRun = true)
     public void setUp() {
         departureDate = LocalDate.now().plusDays(1);
@@ -36,7 +37,7 @@ public class VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully extends Te
                 .build();
     }
 
-    @Test(groups = {"smoke", "regression"}, description = "TC01 - VietJet - Search and choose tickets on a specific day successfully")
+    @Test(groups = {"vietjet", "smoke", "regression"}, description = "TC01 - VietJet - Search and choose tickets on a specific day successfully")
     public void VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully() {
         generalPage.openPage();
         homePage.acceptCookie();

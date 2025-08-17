@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="AllTests" parallel="false" thread-count="1">
 
-<suite name="AllTests" parallel="false" thread-count="0">
-
+    <!-- Default parameters -->
     <parameter name="browser" value="chrome"/>
     <parameter name="retryType" value="immediate"/>
     <parameter name="maxRetry" value="0"/>
@@ -12,33 +12,55 @@
         <listener class-name="com.sele3.testng.TestListener"/>
     </listeners>
 
-    <test name="AgodaTest">
+    <!-- Agoda -->
+    <test name="AgodaGroup">
         <parameter name="environment" value="agoda"/>
-        <classes>
-            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndSortHotelSuccessfully"/>
-            <class name="sele3.agoda.Agoda_VerifyUserCanSearchAndFilterHotelSuccessfully"/>
-            <class name="sele3.agoda.Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfully"/>
-        </classes>
+        <groups>
+            <run>
+                <include name="agoda"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="sele3.agoda"/>
+        </packages>
     </test>
-    <test name="VietJetTest">
+
+    <!-- VietJet -->
+    <test name="VietJetGroup">
         <parameter name="environment" value="vietjet"/>
-        <classes>
-            <class name="sele3.vietjet.VietJet_SearchAndChooseTicketsOnASpecificDaySuccessfully">
-                <parameter name="language" value="en"/>
-            </class>
-            <class name="sele3.vietjet.Vietjet_VerifyUserCanSearchAndChooseCheapestTicketOnNext3Months">
-                <parameter name="language" value="vi"/>
-            </class>
-        </classes>
+        <groups>
+            <run>
+                <include name="vietjet"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="java.sele3.vietjet"/>
+        </packages>
     </test>
-    <test name="LeapFrogContentTest">
-        <classes>
-            <class name="sele3.leapFrog.LeapFrogContentTest"/>
-        </classes>
+
+    <!-- LeapFrog -->
+    <test name="LeapFrogGroup">
+        <parameter name="environment" value="leapfrog"/>
+        <groups>
+            <run>
+                <include name="leapfrog"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="sele3.leapFrog"/>
+        </packages>
     </test>
-    <test name="BookTest">
-        <classes>
-            <class name="sele3.book.Book_VerifyUserCanSearchBookSuccessfully"/>
-        </classes>
+
+    <!-- Book -->
+    <test name="BookGroup">
+        <parameter name="environment" value="book"/>
+        <groups>
+            <run>
+                <include name="book"/>
+            </run>
+        </groups>
+        <packages>
+            <package name="sele3.book"/>
+        </packages>
     </test>
 </suite>

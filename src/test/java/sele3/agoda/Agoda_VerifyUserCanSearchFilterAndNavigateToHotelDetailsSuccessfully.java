@@ -46,7 +46,7 @@ public class Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfull
         expectedReviewTypes = Arrays.asList(ReviewType.values());
     }
 
-    @Test(groups = {"smoke", "regression"}, description = "TC03 - Agoda - Search, filter and navigate to hotel details successfully")
+    @Test(groups = {"agoda", "smoke", "regression"}, description = "TC03 - Agoda - Search, filter and navigate to hotel details successfully")
     public void Agoda_VerifyUserCanSearchFilterAndNavigateToHotelDetailsSuccessfully() {
         generalPage.openPage();
         homePage.closeAds();
