@@ -111,60 +111,12 @@ mvn clean test \
 | `-DretryStrategy`             | Retry strategy to apply (`immediate` or `post-suite`).                       |
 
 
-If you want to run the case in Specify .xml file, give a reference at your .xml file path
-
-In the Maven Apache Plugin to the POM.xml
-
-```
-<build>
-<plugins>
-    [...]
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
-        <configuration>
-          <suiteXmlFiles>
-            <suiteXmlFile>testng.xml</suiteXmlFile>
-          </suiteXmlFiles>
-        </configuration>
-      </plugin>
-    [...]
-</plugins>
-</build>
-```
-
-Provide the Location of testNG.xml file
-Example: `src/test/resources/suites/defaultSuite.xml`
-```
- <profiles>
-        <profile>
-            <id>testSuite</id>
-            <properties>
-                <suiteFile>src/test/resources/suites/testSuite.xml</suiteFile>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>testContent</id>
-            <properties>
-                <suiteFile>src/test/resources/suites/testContentSuite.xml</suiteFile>
-            </properties>
-        </profile>
-    </profiles>
-```
+If you want to run the cases based on groups such as env, smoke, or regression …
 In command line, add this command
 
-```mvn clean test -P agoda```
-```mvn clean test -P vietJet```
-```mvn clean test -P leadFrog```
-```mvn clean test -P book```
-```mvn clean test -DsuiteFile=src/test/resources/suites/agodaTestSuite.xml```
-```mvn clean test -DsuiteFile=src/test/resources/suites/vjTestSuite.xml```
-```mvn clean test -DsuiteFile=src/test/resources/suites/leapFrogContentTestSuite.xml```
-```mvn clean test -DsuiteFile=src/test/resources/suites/bookTestSuite.xml```
-
-
+```mvn clean test -Dgroups=agoda```
+```mvn clean test -Dgroups=smoke```
+```mvn clean test -Dgroups=regression```
 
 ### Distributed testing
 

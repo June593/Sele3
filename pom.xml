@@ -115,34 +115,6 @@
             <version>3.13.0</version>
         </dependency>
     </dependencies>
-    <profiles>
-        <profile>
-            <id>agoda</id>
-            <properties>
-                <suiteFile>${suites.dir}/agodaTestSuite.xml</suiteFile>
-            </properties>
-        </profile>
-        <profile>
-            <id>vietJet</id>
-            <properties>
-                <suiteFile>${suites.dir}/vjTestSuite.xml</suiteFile>
-            </properties>
-        </profile>
-        <profile>
-            <id>leapFrog</id>
-            <properties>
-                <suiteFile>${suites.dir}/leapFrogContentTestSuite.xml</suiteFile>
-            </properties>
-        </profile>
-        <profile>
-            <id>book</id>
-            <properties>
-                <suiteFile>${suites.dir}/bookTestSuite.xml</suiteFile>
-            </properties>
-        </profile>
-
-    </profiles>
-
     <build>
         <plugins>
             <plugin>
